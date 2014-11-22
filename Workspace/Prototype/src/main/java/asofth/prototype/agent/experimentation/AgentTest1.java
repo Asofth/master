@@ -1,4 +1,4 @@
-package asofth.prototype.agent;
+package asofth.prototype.agent.experimentation;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
