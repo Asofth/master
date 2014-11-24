@@ -2,8 +2,8 @@ package asofth.prototype.agent.behaviour;
 
 import asofth.prototype.event.PrimitiveEvent;
 
-public interface Collect {
+public interface Collect<T extends PrimitiveEvent> {
 
-	public PrimitiveEvent doCollect();
+	public T doCollect();
 	
 }

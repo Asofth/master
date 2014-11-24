@@ -1,15 +1,15 @@
 package asofth.prototype.event;
 
-public class PrimitiveEvent {
+public abstract class PrimitiveEvent {
 
 	private String id;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
+	public PrimitiveEvent(String id) {
 		this.id = id;
+	}
+	
+	public String getId() {
+		return this.id;
 	}
 
 }
