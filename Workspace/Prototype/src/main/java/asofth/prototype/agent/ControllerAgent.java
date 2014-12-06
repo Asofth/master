@@ -2,10 +2,6 @@ package asofth.prototype.agent;
 
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.wrapper.AgentContainer;
 
 /**
@@ -28,10 +24,15 @@ public class ControllerAgent extends Agent {
 			try {
 				AgentContainer ac = super.myAgent.getContainerController();
 
-				String agentName = CollectorAgent.class.getName();
-				ac.createNewAgent(agentName, CollectorAgent.class.getName(),
-						null);
-				ac.getAgent(agentName).start();			
+				// Agente coletor
+				ac.createNewAgent(AgentUtils.getAgentName(CollectorAgent.class),
+						CollectorAgent.class.getName(), null);
+				ac.getAgent(AgentUtils.getAgentName(CollectorAgent.class)).start();
+
+				// Agente analisador eventos
+				ac.createNewAgent(AgentUtils.getAgentName(EventProcessingAgent.class),
+						EventProcessingAgent.class.getName(), null);
+				ac.getAgent(AgentUtils.getAgentName(EventProcessingAgent.class)).start();
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -45,27 +46,12 @@ public class ControllerAgent extends Agent {
 		super.setup();
 		super.addBehaviour(new Startup());
 
-		this.register(this, "Controller", "Controller-Type");
+		AgentUtils.register(this);
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
-	}
-
-	private void register(Agent agent, String name, String type) {
-
-		DFAgentDescription dfd = new DFAgentDescription();
-		dfd.setName(agent.getAID());
-		ServiceDescription sd = new ServiceDescription();
-		sd.setName(name);
-		sd.setType(type);
-		dfd.addServices(sd);
-		try {
-			DFService.register(agent, dfd);
-		} catch (FIPAException fe) {
-			fe.printStackTrace();
-		}
 	}
 
 }

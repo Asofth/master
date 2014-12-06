@@ -18,6 +18,8 @@ public class CollectorAgent extends Agent {
 		
 		// TODO: setar o behaviour em runtime
 		super.addBehaviour(new QueueSizeCollectorBehaviour());
+		
+		AgentUtils.register(this);
 	}
 	
 	@Override

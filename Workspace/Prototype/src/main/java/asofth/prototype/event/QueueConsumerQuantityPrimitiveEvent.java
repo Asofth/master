@@ -2,6 +2,8 @@ package asofth.prototype.event;
 
 public class QueueConsumerQuantityPrimitiveEvent extends PrimitiveEvent {
 
+	private static final long serialVersionUID = 2817347352459013600L;
+
 	private String queueName;
 	private long consumerQuantity;
 
