@@ -1,4 +1,4 @@
-package asofth.prototype.agent.behaviour.impl;
+package asofth.prototype.util;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,21 +14,13 @@ import javax.management.remote.JMXServiceURL;
 import org.apache.activemq.broker.jmx.BrokerViewMBean;
 import org.apache.activemq.broker.jmx.QueueViewMBean;
 
-public class JMXQueueHelper {
+public class JMXQueueUtils {
 
 	private String urlDescription = "service:jmx:rmi:///jndi/rmi://localhost:2011/jmxrmi";
 	private String user = "admin";
 	private String password = "activemq";
 	private String brokerName = "org.apache.activemq:type=Broker,brokerName=localhost";
 	private String queueName = "processing";
-
-	public static void main(String[] args) throws Exception {
-
-		System.out.println("QUEUE SIZE="
-				+ (new JMXQueueHelper()).getProcessingQueueSize());
-		System.out.println("CONSUMER COUNT="
-				+ (new JMXQueueHelper()).getProcessingQueueConsumerCount());
-	}
 
 	public Long getProcessingQueueConsumerCount() {
 

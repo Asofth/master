@@ -2,6 +2,7 @@ package asofth.prototype.agent;
 
 import jade.core.Agent;
 import asofth.prototype.agent.behaviour.impl.EventProcessingBehaviour;
+import asofth.prototype.util.DFUtils;
 
 /**
  * Responsible for receiving and analyzing primitive events
@@ -17,7 +18,7 @@ public class EventProcessingAgent extends Agent {
 		super.setup();
 		super.addBehaviour(new EventProcessingBehaviour());
 
-		AgentUtils.register(this);
+		DFUtils.register(this);
 	}
 
 	@Override

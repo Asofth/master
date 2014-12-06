@@ -4,6 +4,11 @@ import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.wrapper.AgentContainer;
 
+import java.util.StringTokenizer;
+
+import asofth.prototype.util.DFUtils;
+import asofth.prototype.util.EnvironmentUtils;
+
 /**
  * Responsible for initializing and controlling the collectors agents and its
  * behaviours
@@ -18,27 +23,35 @@ public class ControllerAgent extends Agent {
 
 		private static final long serialVersionUID = -1969910869557015465L;
 
+		/**
+		 * This method initializes the agents as defined in
+		 * environment.properties file.
+		 */
 		@Override
 		public void action() {
 
 			try {
+
+				StringTokenizer agentsClasses = new StringTokenizer(
+						EnvironmentUtils.getStartupAgentsClasses(), ";");
+
 				AgentContainer ac = super.myAgent.getContainerController();
 
-				// Agente coletor
-				ac.createNewAgent(AgentUtils.getAgentName(CollectorAgent.class),
-						CollectorAgent.class.getName(), null);
-				ac.getAgent(AgentUtils.getAgentName(CollectorAgent.class)).start();
+				while (agentsClasses.hasMoreTokens()) {
 
-				// Agente analisador eventos
-				ac.createNewAgent(AgentUtils.getAgentName(EventProcessingAgent.class),
-						EventProcessingAgent.class.getName(), null);
-				ac.getAgent(AgentUtils.getAgentName(EventProcessingAgent.class)).start();
+					@SuppressWarnings("unchecked")
+					Class<? extends Agent> agentClass = (Class<? extends Agent>) Class
+							.forName(agentsClasses.nextToken());
+					ac.createNewAgent(DFUtils.getAgentName(agentClass),
+							agentClass.getName(), null);
+					ac.getAgent(DFUtils.getAgentName(agentClass)).start();
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				super.myAgent.doDelete();
 			}
 		}
-
 	}
 
 	@Override
@@ -46,7 +59,7 @@ public class ControllerAgent extends Agent {
 		super.setup();
 		super.addBehaviour(new Startup());
 
-		AgentUtils.register(this);
+		DFUtils.register(this);
 	}
 
 	@Override

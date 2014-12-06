@@ -5,10 +5,10 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 
-import asofth.prototype.agent.AgentUtils;
 import asofth.prototype.agent.EventProcessingAgent;
 import asofth.prototype.agent.behaviour.Collect;
 import asofth.prototype.event.PrimitiveEvent;
+import asofth.prototype.util.DFUtils;
 
 /**
  * Default collector implementation, specialized in sending the primitive events
@@ -39,7 +39,7 @@ public abstract class AbstractCollectorBehaviour<T extends PrimitiveEvent>
 			if (primitive != null) {
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.setContentObject(primitive);
-				msg.addReceiver(AgentUtils.search(super.myAgent,
+				msg.addReceiver(DFUtils.search(super.myAgent,
 						EventProcessingAgent.class));
 				super.myAgent.send(msg);
 			}

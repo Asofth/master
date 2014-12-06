@@ -1,4 +1,4 @@
-package asofth.prototype.agent;
+package asofth.prototype.util;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -7,7 +7,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
-public class AgentUtils {
+public class DFUtils {
 
 	private static final String TYPE_DESCRIPTION = "-Type";
 
