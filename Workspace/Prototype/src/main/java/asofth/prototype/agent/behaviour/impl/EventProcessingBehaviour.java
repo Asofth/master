@@ -23,7 +23,7 @@ public class EventProcessingBehaviour extends CyclicBehaviour {
 			try {
 				PrimitiveEvent event = (PrimitiveEvent) msgReceived
 						.getContentObject();
-				System.out.println(event.toString());
+				System.out.println("Receiving Event =" + event.toString());
 			} catch (UnreadableException | ClassCastException e) {
 				e.printStackTrace();
 			}

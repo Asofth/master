@@ -20,8 +20,10 @@ public class QueueConsumerQuantityCollectorBehaviour extends
 		Long size = this.queueHelper.getProcessingQueueConsumerCount();
 
 		if (size != null) {
-			return new QueueConsumerQuantityPrimitiveEvent("CONSUMER_QUANTITY",
-					this.queueHelper.getQueueName(), size);
+			QueueConsumerQuantityPrimitiveEvent event = new QueueConsumerQuantityPrimitiveEvent(
+					"CONSUMER_QUANTITY", this.queueHelper.getQueueName(), size);
+			System.out.println("Sending Event =" + event.toString());
+			return event;
 		}
 		return null;
 	}

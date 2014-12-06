@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import asofth.prototype.util.DFUtils;
 import asofth.prototype.util.EnvironmentUtils;
+import asofth.prototype.util.EnvironmentUtils.EnvironmentProperties;
 
 /**
  * Responsible for initializing and controlling the collectors agents and its
@@ -33,7 +34,9 @@ public class ControllerAgent extends Agent {
 			try {
 
 				StringTokenizer agentsClasses = new StringTokenizer(
-						EnvironmentUtils.getStartupAgentsClasses(), ";");
+						EnvironmentUtils
+								.getProperty(EnvironmentProperties.AGENT_STARTUP_CLASSES),
+						";");
 
 				AgentContainer ac = super.myAgent.getContainerController();
 

@@ -1,30 +1,35 @@
 package asofth.prototype;
 
-import jade.Boot;
+//import jade.Boot; 
 
-import java.util.Arrays;
+//import java.util.Arrays;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+//import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+//import org.springframework.context.ApplicationContext;
+//import org.springframework.context.annotation.ComponentScan;
+//import org.springframework.context.annotation.Configuration;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
+//@Configuration
+//@EnableAutoConfiguration
+//@ComponentScan
+/**
+ * Just a Spring example
+ * @author cathenesi
+ *
+ */
 public class Start {
 
 	public static void main(String[] args) {
-		ApplicationContext ctx = SpringApplication.run(Boot.class, args);
-
-		System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-		String[] beanNames = ctx.getBeanDefinitionNames();
-		Arrays.sort(beanNames);
-		for (String beanName : beanNames) {
-			System.out.println(beanName);
-		}
+//		ApplicationContext ctx = SpringApplication.run(Boot.class, args);
+//
+//		System.out.println("Let's inspect the beans provided by Spring Boot:");
+//
+//		String[] beanNames = ctx.getBeanDefinitionNames();
+//		Arrays.sort(beanNames);
+//		for (String beanName : beanNames) {
+//			System.out.println(beanName);
+//		}
 	}
 
 }

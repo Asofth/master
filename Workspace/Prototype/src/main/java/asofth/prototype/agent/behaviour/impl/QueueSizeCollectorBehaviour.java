@@ -14,16 +14,17 @@ public class QueueSizeCollectorBehaviour extends
 	public Long getIntervalInMilliseconds() {
 		return 50L;
 	}
-	
+
 	@Override
 	public QueueSizePrimitiveEvent doCollect() {
 		Long size = this.queueHelper.getProcessingQueueSize();
 
 		if (size != null) {
-			return new QueueSizePrimitiveEvent("QUEUE_SIZE",
-					this.queueHelper.getQueueName(), size);
+			QueueSizePrimitiveEvent event = new QueueSizePrimitiveEvent(
+					"QUEUE_SIZE", this.queueHelper.getQueueName(), size);
+			System.out.println("Sending Event =" + event.toString());
+			return event;
 		}
 		return null;
 	}
-
 }
