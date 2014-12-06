@@ -18,11 +18,12 @@ public class EventProcessingAgent extends Agent {
 		super.setup();
 		super.addBehaviour(new EventProcessingBehaviour());
 
-		DFUtils.register(this);
+		DFUtils.register(this, ControllerAgent.SESSION_ID);
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
+		DFUtils.deregister(this);
 		super.finalize();
 	}
 

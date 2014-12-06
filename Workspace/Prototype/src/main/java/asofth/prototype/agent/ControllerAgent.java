@@ -5,6 +5,7 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.wrapper.AgentContainer;
 
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import asofth.prototype.util.DFUtils;
 import asofth.prototype.util.EnvironmentUtils;
@@ -20,6 +21,8 @@ public class ControllerAgent extends Agent {
 
 	private static final long serialVersionUID = 273786892468632402L;
 
+	public static final long SESSION_ID = UUID.randomUUID().getLeastSignificantBits();
+	
 	public class Startup extends OneShotBehaviour {
 
 		private static final long serialVersionUID = -1969910869557015465L;
@@ -45,9 +48,9 @@ public class ControllerAgent extends Agent {
 					@SuppressWarnings("unchecked")
 					Class<? extends Agent> agentClass = (Class<? extends Agent>) Class
 							.forName(agentsClasses.nextToken());
-					ac.createNewAgent(DFUtils.getAgentName(agentClass),
-							agentClass.getName(), null);
-					ac.getAgent(DFUtils.getAgentName(agentClass)).start();
+					String agentName = DFUtils.getAgentName(agentClass, SESSION_ID);
+					ac.createNewAgent(agentName, agentClass.getName(), null);
+					ac.getAgent(agentName).start();
 				}
 
 			} catch (Exception e) {
@@ -62,11 +65,12 @@ public class ControllerAgent extends Agent {
 		super.setup();
 		super.addBehaviour(new Startup());
 
-		DFUtils.register(this);
+		DFUtils.register(this, SESSION_ID);
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
+		DFUtils.deregister(this);
 		super.finalize();
 	}
 

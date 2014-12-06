@@ -1,5 +1,6 @@
 package asofth.prototype.agent;
 
+import asofth.prototype.util.DFUtils;
 import jade.core.Agent;
 
 /**
@@ -18,6 +19,7 @@ public class ActuatorAgent extends Agent {
 
 	@Override
 	protected void finalize() throws Throwable {
+		DFUtils.deregister(this);
 		super.finalize();
 	}
 

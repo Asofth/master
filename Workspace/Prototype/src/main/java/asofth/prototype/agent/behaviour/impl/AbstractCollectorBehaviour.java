@@ -5,6 +5,7 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 
+import asofth.prototype.agent.ControllerAgent;
 import asofth.prototype.agent.EventProcessingAgent;
 import asofth.prototype.agent.behaviour.Collect;
 import asofth.prototype.event.PrimitiveEvent;
@@ -40,7 +41,7 @@ public abstract class AbstractCollectorBehaviour<T extends PrimitiveEvent>
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.setContentObject(primitive);
 				msg.addReceiver(DFUtils.search(super.myAgent,
-						EventProcessingAgent.class));
+						EventProcessingAgent.class, ControllerAgent.SESSION_ID));
 				super.myAgent.send(msg);
 			}
 

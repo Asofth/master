@@ -20,11 +20,12 @@ public class QueueStatisticsCollectorAgent extends Agent {
 		super.addBehaviour(new QueueSizeCollectorBehaviour());
 		super.addBehaviour(new QueueConsumerQuantityCollectorBehaviour());
 
-		DFUtils.register(this);
+		DFUtils.register(this, ControllerAgent.SESSION_ID);
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
+		DFUtils.deregister(this);
 		super.finalize();
 	}
 

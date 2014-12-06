@@ -11,21 +11,23 @@ public class DFUtils {
 
 	private static final String TYPE_DESCRIPTION = "-Type";
 
-	public static String getAgentName(Class<? extends Agent> agentClass) {
-		return agentClass.getSimpleName();
+	public static String getAgentName(Class<? extends Agent> agentClass,
+			long sessionID) {
+		return agentClass.getSimpleName() + "_" + sessionID;
 	}
 
-	public static String getAgentType(Class<? extends Agent> agentClass) {
-		return agentClass.getSimpleName() + TYPE_DESCRIPTION;
+	public static String getAgentType(Class<? extends Agent> agentClass,
+			long sessionID) {
+		return agentClass.getSimpleName() + TYPE_DESCRIPTION + "_" + sessionID;
 	}
 
-	public static void register(Agent agent) {
+	public static void register(Agent agent, long sessionID) {
 
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(agent.getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setName(getAgentName(agent.getClass()));
-		sd.setType(getAgentType(agent.getClass()));
+		sd.setName(getAgentName(agent.getClass(), sessionID));
+		sd.setType(getAgentType(agent.getClass(), sessionID));
 		dfd.addServices(sd);
 		try {
 			DFService.register(agent, dfd);
@@ -35,13 +37,23 @@ public class DFUtils {
 		}
 	}
 
+	public static void deregister(Agent agent) {
+
+		try {
+			DFService.deregister(agent);
+		} catch (FIPAException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static AID search(Agent currentAgent,
-			Class<? extends Agent> agentClassToSearch) {
+			Class<? extends Agent> agentClassToSearch, long sessionID) {
 
 		DFAgentDescription dfd = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setName(getAgentName(agentClassToSearch));
-		sd.setType(getAgentType(agentClassToSearch));
+		sd.setName(getAgentName(agentClassToSearch, sessionID));
+		sd.setType(getAgentType(agentClassToSearch, sessionID));
 		dfd.addServices(sd);
 		try {
 			DFAgentDescription[] results = DFService.search(currentAgent, dfd);
