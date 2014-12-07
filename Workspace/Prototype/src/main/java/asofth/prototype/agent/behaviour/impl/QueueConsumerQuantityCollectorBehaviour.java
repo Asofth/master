@@ -2,6 +2,7 @@ package asofth.prototype.agent.behaviour.impl;
 
 import asofth.prototype.event.QueueConsumerQuantityPrimitiveEvent;
 import asofth.prototype.util.JMXQueueUtils;
+import asofth.prototype.util.JMXQueueUtils.QueueMethod;
 
 public class QueueConsumerQuantityCollectorBehaviour extends
 		AbstractCollectorBehaviour<QueueConsumerQuantityPrimitiveEvent> {
@@ -19,12 +20,12 @@ public class QueueConsumerQuantityCollectorBehaviour extends
 
 	@Override
 	public QueueConsumerQuantityPrimitiveEvent doCollect() {
-		Long size = this.queueHelper.getProcessingQueueConsumerCount();
+		Long size = (Long) this.queueHelper.executeMethodQueueViewMBean(
+				QueueMethod.CONSUMER_QUANTITY, null);
 
 		if (size != null && this.lastQuantity != size) {
 			QueueConsumerQuantityPrimitiveEvent event = new QueueConsumerQuantityPrimitiveEvent(
 					"CONSUMER_QUANTITY", this.queueHelper.getQueueName(), size);
-			System.out.println("Sending Event = " + event.toString());
 			this.lastQuantity = size;
 			return event;
 		}

@@ -1,6 +1,7 @@
 package asofth.prototype.agent.behaviour.impl;
 
 import asofth.prototype.util.JMXQueueUtils;
+import asofth.prototype.util.JMXQueueUtils.QueueMethod;
 import jade.core.behaviours.OneShotBehaviour;
 
 /**
@@ -17,7 +18,8 @@ public class QueueCleanerBehaviour extends OneShotBehaviour {
 
 		try {
 			// remove the pending messages
-			this.queueHelper.purgeQueue();
+			this.queueHelper.executeMethodQueueViewMBean(QueueMethod.PURGE,
+					null);
 
 			super.myAgent.doDelete();
 

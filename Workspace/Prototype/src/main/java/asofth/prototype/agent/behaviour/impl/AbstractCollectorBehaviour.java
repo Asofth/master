@@ -42,6 +42,7 @@ public abstract class AbstractCollectorBehaviour<T extends PrimitiveEvent>
 				msg.setContentObject(primitive);
 				msg.addReceiver(DFUtils.search(super.myAgent,
 						EventProcessingAgent.class, ControllerAgent.SESSION_ID));
+				System.out.println("Sending Event: " + primitive.toString());
 				super.myAgent.send(msg);
 			}
 

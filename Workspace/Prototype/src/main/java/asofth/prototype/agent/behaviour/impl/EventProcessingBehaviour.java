@@ -32,7 +32,7 @@ public class EventProcessingBehaviour extends CyclicBehaviour {
 				System.out.println(new Date()
 						+ " - Receiving Event (sent from IP "
 						+ event.getOriginAddress() + " at "
-						+ event.getCollectingDateTime() + ") = "
+						+ event.getCollectingDateTime() + "): "
 						+ event.toString());
 
 				if (event instanceof QueueSizePrimitiveEvent) {

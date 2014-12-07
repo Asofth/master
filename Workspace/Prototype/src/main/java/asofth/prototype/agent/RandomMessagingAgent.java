@@ -1,9 +1,12 @@
 package asofth.prototype.agent;
 
+import java.util.UUID;
+
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import asofth.prototype.util.DFUtils;
 import asofth.prototype.util.JMXQueueUtils;
+import asofth.prototype.util.JMXQueueUtils.QueueMethod;
 
 /**
  * Testing purpose agent, created to populated a JMS Queue randomically
@@ -34,7 +37,8 @@ public class RandomMessagingAgent extends Agent {
 				}
 
 				// generates random Text Messages
-				this.queueHelper.sendRandomTextMessage();
+				this.queueHelper.executeMethodQueueViewMBean(
+						QueueMethod.SEND_MESSAGE, UUID.randomUUID().toString());
 
 			} catch (Exception e) {
 				e.printStackTrace();
