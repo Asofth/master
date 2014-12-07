@@ -3,7 +3,7 @@ package asofth.prototype.event;
 public class QueueSizePrimitiveEvent extends PrimitiveEvent {
 
 	private static final long serialVersionUID = 3527287186378761896L;
-	
+
 	private String queueName;
 	private long size;
 
@@ -24,6 +24,10 @@ public class QueueSizePrimitiveEvent extends PrimitiveEvent {
 	@Override
 	public String toString() {
 		return super.getId() + "=" + this.size;
+	}
+
+	public void ruleFired() {
+		System.out.println(this.getClass().getName() + " notified");
 	}
 
 }

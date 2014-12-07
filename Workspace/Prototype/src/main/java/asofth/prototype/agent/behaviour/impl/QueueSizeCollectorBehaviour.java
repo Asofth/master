@@ -10,6 +10,8 @@ public class QueueSizeCollectorBehaviour extends
 
 	private JMXQueueUtils queueHelper = new JMXQueueUtils();
 
+	private long lastQuantity = 0;
+
 	@Override
 	public Long getIntervalInMilliseconds() {
 		return 50L;
@@ -19,10 +21,11 @@ public class QueueSizeCollectorBehaviour extends
 	public QueueSizePrimitiveEvent doCollect() {
 		Long size = this.queueHelper.getProcessingQueueSize();
 
-		if (size != null) {
+		if (size != null && this.lastQuantity != size) {
 			QueueSizePrimitiveEvent event = new QueueSizePrimitiveEvent(
 					"QUEUE_SIZE", this.queueHelper.getQueueName(), size);
 			System.out.println("Sending Event =" + event.toString());
+			this.lastQuantity = size;
 			return event;
 		}
 		return null;
