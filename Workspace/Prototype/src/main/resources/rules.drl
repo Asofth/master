@@ -1,0 +1,13 @@
+declare QueueSizePrimitiveEvent
+	@role( event )
+end
+
+rule queueMaxSize
+	when 
+		$queueSizeEvent : QueueSizePrimitiveEvent(size > 10)
+		from entry-point QueueStream
+	then
+		modify ($queueSizeEvent) {
+			ruleFired()
+		};
+end
