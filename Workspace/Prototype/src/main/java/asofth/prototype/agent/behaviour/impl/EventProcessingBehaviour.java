@@ -10,6 +10,16 @@ import java.util.Date;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.io.ResourceType;
+import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.ClockTypeOption;
+import org.kie.api.runtime.rule.EntryPoint;
+import org.kie.internal.KnowledgeBase;
+import org.kie.internal.KnowledgeBaseFactory;
+import org.kie.internal.builder.KnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.io.ResourceFactory;
+import org.kie.internal.runtime.StatefulKnowledgeSession;
 
 import asofth.prototype.agent.ControllerAgent;
 import asofth.prototype.agent.QueueCleanerAgent;
@@ -20,6 +30,36 @@ import asofth.prototype.util.DFUtils;
 public class EventProcessingBehaviour extends CyclicBehaviour {
 
 	private static final long serialVersionUID = 6434269996196411862L;
+
+	private KnowledgeBase knowledgeBase = null;
+	private StatefulKnowledgeSession session = null;
+
+	public EventProcessingBehaviour() {
+		super();
+
+		KnowledgeBuilder builder = KnowledgeBuilderFactory
+				.newKnowledgeBuilder();
+		builder.add(ResourceFactory.newClassPathResource("rules.drl"),
+				ResourceType.DRL);
+		if (builder.hasErrors()) {
+			throw new RuntimeException(builder.getErrors().toString());
+		}
+
+		KieBaseConfiguration kBaseConfig = KieServices.Factory.get()
+				.newKieBaseConfiguration();
+		kBaseConfig.setOption(EventProcessingOption.STREAM);
+
+		this.knowledgeBase = KnowledgeBaseFactory.newKnowledgeBase(kBaseConfig);
+		knowledgeBase.addKnowledgePackages(builder.getKnowledgePackages());
+
+		KieSessionConfiguration sessionConfig = KieServices.Factory.get()
+				.newKieSessionConfiguration();
+		sessionConfig.setOption(ClockTypeOption.get("realtime"));
+
+		this.session = knowledgeBase.newStatefulKnowledgeSession(sessionConfig,
+				null);
+
+	}
 
 	@Override
 	public void action() {
@@ -37,6 +77,11 @@ public class EventProcessingBehaviour extends CyclicBehaviour {
 
 				if (event instanceof QueueSizePrimitiveEvent) {
 					if (((QueueSizePrimitiveEvent) event).getSize() > 10) {
+						
+						EntryPoint queueStream = this.session.getEntryPoint("QueueStream");
+						queueStream.insert(event);
+						this.session.fireAllRules();
+
 						AgentContainer ac = super.myAgent
 								.getContainerController();
 						String agentName = DFUtils.getAgentName(
@@ -58,11 +103,4 @@ public class EventProcessingBehaviour extends CyclicBehaviour {
 		}
 	}
 
-	public static void main(String[] args) {
-
-		KieBaseConfiguration config = KieServices.Factory.get()
-				.newKieBaseConfiguration();
-		config.setOption(EventProcessingOption.CLOUD);
-
-	}
 }

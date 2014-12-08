@@ -1,11 +1,12 @@
-declare QueueSizePrimitiveEvent
+declare asofth.prototype.event.QueueSizePrimitiveEvent
 	@role( event )
+	@expires( 2s )
 end
 
 rule queueMaxSize
 	when 
-		$queueSizeEvent : QueueSizePrimitiveEvent(size > 10)
-		from entry-point QueueStream
+		$queueSizeEvent : asofth.prototype.event.QueueSizePrimitiveEvent(size > 10)
+		from entry-point "QueueStream"
 	then
 		modify ($queueSizeEvent) {
 			ruleFired()

@@ -30,7 +30,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/drools-core-6.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/drools-core-6.0.0.Final.jar" sourcepath="D:/dev/droolsjbpm-tools-distribution-6.0.0.Final/sources/org.jbpm.eclipse-6.0.0.Final-sources.jar"/>
 	<classpathentry kind="lib" path="lib/drools-compiler-6.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/drools-decisiontables-6.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/drools-jsr94-6.0.0.Final.jar"/>

@@ -28,6 +28,7 @@ public class QueueSizePrimitiveEvent extends PrimitiveEvent {
 
 	public void ruleFired() {
 		System.out.println(this.getClass().getName() + " notified");
+		//this.size = 9;
 	}
 
 }
