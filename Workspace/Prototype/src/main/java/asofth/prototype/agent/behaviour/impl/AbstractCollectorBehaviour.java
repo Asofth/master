@@ -5,11 +5,11 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 
+import monitor.util.DFUtils;
 import asofth.prototype.agent.ControllerAgent;
 import asofth.prototype.agent.EventProcessingAgent;
 import asofth.prototype.agent.behaviour.Collect;
 import asofth.prototype.event.PrimitiveEvent;
-import asofth.prototype.util.DFUtils;
 
 /**
  * Default collector implementation, specialized in sending the primitive events

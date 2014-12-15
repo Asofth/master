@@ -1,9 +1,9 @@
 package asofth.prototype.agent;
 
+import monitor.util.DFUtils;
 import jade.core.Agent;
 import asofth.prototype.agent.behaviour.impl.QueueConsumerQuantityCollectorBehaviour;
 import asofth.prototype.agent.behaviour.impl.QueueSizeCollectorBehaviour;
-import asofth.prototype.util.DFUtils;
 
 /**
  * Responsible for collecting primitive events from the monitored Queue

@@ -2,11 +2,11 @@ package asofth.prototype.agent;
 
 import java.util.UUID;
 
+import monitor.util.DFUtils;
+import monitor.util.JMXQueueUtils;
+import monitor.util.JMXQueueUtils.QueueMethod;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import asofth.prototype.util.DFUtils;
-import asofth.prototype.util.JMXQueueUtils;
-import asofth.prototype.util.JMXQueueUtils.QueueMethod;
 
 /**
  * Testing purpose agent, created to populated a JMS Queue randomically

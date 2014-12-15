@@ -1,8 +1,8 @@
 package asofth.prototype.agent;
 
+import monitor.util.DFUtils;
 import jade.core.Agent;
 import asofth.prototype.agent.behaviour.impl.EventProcessingBehaviour;
-import asofth.prototype.util.DFUtils;
 
 /**
  * Responsible for receiving and analyzing primitive events

@@ -7,6 +7,8 @@ import jade.wrapper.AgentContainer;
 
 import java.util.Date;
 
+import monitor.util.DFUtils;
+
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.EventProcessingOption;
@@ -25,7 +27,6 @@ import asofth.prototype.agent.ControllerAgent;
 import asofth.prototype.agent.QueueCleanerAgent;
 import asofth.prototype.event.PrimitiveEvent;
 import asofth.prototype.event.QueueSizePrimitiveEvent;
-import asofth.prototype.util.DFUtils;
 
 public class EventProcessingBehaviour extends CyclicBehaviour {
 

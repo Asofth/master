@@ -1,4 +1,4 @@
-package asofth.prototype.util;
+package monitor.util;
 
 import jade.core.AID;
 import jade.core.Agent;

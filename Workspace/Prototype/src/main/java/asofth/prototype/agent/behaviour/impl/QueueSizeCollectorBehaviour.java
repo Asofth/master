@@ -1,8 +1,8 @@
 package asofth.prototype.agent.behaviour.impl;
 
+import monitor.util.JMXQueueUtils;
+import monitor.util.JMXQueueUtils.QueueMethod;
 import asofth.prototype.event.QueueSizePrimitiveEvent;
-import asofth.prototype.util.JMXQueueUtils;
-import asofth.prototype.util.JMXQueueUtils.QueueMethod;
 
 public class QueueSizeCollectorBehaviour extends
 		AbstractCollectorBehaviour<QueueSizePrimitiveEvent> {

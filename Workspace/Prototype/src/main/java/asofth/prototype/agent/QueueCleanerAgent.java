@@ -1,8 +1,8 @@
 package asofth.prototype.agent;
 
+import monitor.util.DFUtils;
 import jade.core.Agent;
 import asofth.prototype.agent.behaviour.impl.QueueCleanerBehaviour;
-import asofth.prototype.util.DFUtils;
 
 /**
  * Executes the behaviour that removes all the pending messages in the monitored

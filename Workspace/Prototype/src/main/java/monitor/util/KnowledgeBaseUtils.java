@@ -1,4 +1,4 @@
-package asofth.prototype.util;
+package monitor.util;
 
 public class KnowledgeBaseUtils {
 

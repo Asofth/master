@@ -1,7 +1,7 @@
 package asofth.prototype.agent.behaviour.impl;
 
-import asofth.prototype.util.JMXQueueUtils;
-import asofth.prototype.util.JMXQueueUtils.QueueMethod;
+import monitor.util.JMXQueueUtils;
+import monitor.util.JMXQueueUtils.QueueMethod;
 import jade.core.behaviours.OneShotBehaviour;
 
 /**

@@ -1,4 +1,4 @@
-package asofth.prototype.util;
+package monitor.util;
 
 import java.io.IOException;
 import java.util.Properties;

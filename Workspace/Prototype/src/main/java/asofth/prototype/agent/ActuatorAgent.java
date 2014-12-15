@@ -1,6 +1,6 @@
 package asofth.prototype.agent;
 
-import asofth.prototype.util.DFUtils;
+import monitor.util.DFUtils;
 import jade.core.Agent;
 
 /**

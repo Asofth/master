@@ -1,4 +1,4 @@
-package asofth.prototype.util;
+package monitor.util;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,10 +11,10 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import monitor.util.EnvironmentUtils.EnvironmentProperties;
+
 import org.apache.activemq.broker.jmx.BrokerViewMBean;
 import org.apache.activemq.broker.jmx.QueueViewMBean;
-
-import asofth.prototype.util.EnvironmentUtils.EnvironmentProperties;
 
 public class JMXQueueUtils {
 

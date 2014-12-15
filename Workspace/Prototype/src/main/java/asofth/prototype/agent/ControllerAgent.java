@@ -7,9 +7,9 @@ import jade.wrapper.AgentContainer;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import asofth.prototype.util.DFUtils;
-import asofth.prototype.util.EnvironmentUtils;
-import asofth.prototype.util.EnvironmentUtils.EnvironmentProperties;
+import monitor.util.DFUtils;
+import monitor.util.EnvironmentUtils;
+import monitor.util.EnvironmentUtils.EnvironmentProperties;
 
 /**
  * Responsible for initializing and controlling the collectors agents and its
