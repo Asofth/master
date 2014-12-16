@@ -12,6 +12,7 @@ public class Acao implements Serializable {
 	private String descricao;
 	private Programa programa;
 	private Class<? extends AgenteConfigurador> agenteConfigurador;
+	private boolean executando;
 
 	public Acao(String identificador, String descricao, Programa programa,
 			Class<? extends AgenteConfigurador> agenteConfigurador) {
@@ -37,4 +38,12 @@ public class Acao implements Serializable {
 		return agenteConfigurador;
 	}
 
+	public boolean isExecutando() {
+		return executando;
+	}
+
+	public void setExecutando(boolean executando) {
+		this.executando = executando;
+	}
+	
 }
