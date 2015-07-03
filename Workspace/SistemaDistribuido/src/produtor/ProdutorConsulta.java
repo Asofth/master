@@ -3,6 +3,7 @@ package produtor;
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
+import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
@@ -14,31 +15,32 @@ public class ProdutorConsulta {
 	public static class ProdutorFila implements Runnable {
 
 		public void run() {
-			while (!Thread.currentThread().isInterrupted()) {
-				try {
+			Connection connection = null;
+			Session session = null;
+			MessageProducer producer = null;
+			try {
 
-					// Create a ConnectionFactory
-					ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
-							"tcp://localhost:61616");
+				// Create a ConnectionFactory
+				ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
+						"tcp://localhost:61616");
 
-					// Create a Connection
-					Connection connection = connectionFactory
-							.createConnection();
-					connection.start();
+				// Create a Connection
+				connection = connectionFactory.createConnection();
+				connection.start();
 
-					// Create a Session
-					Session session = connection.createSession(false,
-							Session.AUTO_ACKNOWLEDGE);
+				// Create a Session
+				session = connection.createSession(false,
+						Session.AUTO_ACKNOWLEDGE);
 
-					// Create the destination (Topic or Queue)
-					Destination destination = session
-							.createQueue("requisicoes");
+				// Create the destination (Topic or Queue)
+				Destination destination = session.createQueue("requisicoes");
 
-					// Create a MessageProducer from the Session to the Topic or
-					// Queue
-					MessageProducer producer = session
-							.createProducer(destination);
-					producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+				// Create a MessageProducer from the Session to the Topic or
+				// Queue
+				producer = session.createProducer(destination);
+				producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+
+				while (!Thread.currentThread().isInterrupted()) {
 
 					// Create a messages
 					String text = "Hello world! From: "
@@ -51,15 +53,21 @@ public class ProdutorConsulta {
 							+ " : " + Thread.currentThread().getName());
 					producer.send(message);
 
+					Thread.sleep(500L);
+				}
+
+			} catch (Exception e) {
+				System.out.println("Caught: " + e);
+				e.printStackTrace();
+			} finally {
+				try {
 					// Clean up
+					producer.close();
 					session.close();
 					connection.close();
-
-					Thread.sleep(500L);
-
-				} catch (Exception e) {
-					System.out.println("Caught: " + e);
-					e.printStackTrace();
+				} catch (JMSException ex) {
+					System.out.println("Caught: " + ex);
+					ex.printStackTrace();
 				}
 			}
 		}
