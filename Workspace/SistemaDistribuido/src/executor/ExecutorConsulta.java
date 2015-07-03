@@ -155,8 +155,13 @@ public class ExecutorConsulta {
 	}
 
 	public static void main(String[] args) {
+
+		String nomeInstancia = System
+				.getProperty("ExecutorConsulta.nomeInstancia");
+		nomeInstancia = (nomeInstancia != null ? nomeInstancia : "instancia"
+				+ (new Random()).nextInt(100));
 		ConsumidorFila consumidor = new ConsumidorFila();
-		consumidor.setConector(registrarConector("instancia1"));
+		consumidor.setConector(registrarConector(nomeInstancia));
 		Thread brokerThread = new Thread(consumidor);
 		brokerThread.setDaemon(false);
 		brokerThread.start();
