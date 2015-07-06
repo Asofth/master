@@ -17,84 +17,92 @@ import javax.management.StandardMBean;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-import sistemadistribuido.conector.ConectorAtivacao;
-import sistemadistribuido.conector.ConectorAtivacaoImpl;
+import sistemadistribuido.consumidor.conector.ConectorAtivacao;
+import sistemadistribuido.consumidor.conector.ConectorAtivacaoImpl;
+import util.Ambiente;
+import util.Log;
 
+/**
+ * Aplicação consumidora da fila de mensagens.
+ */
 public class ExecutorConsulta {
 
+	/**
+	 * Implementação de consumidor da fila de mensagens criada para simular
+	 * cenário de negócio.
+	 */
 	public static class ConsumidorFila implements Runnable, ExceptionListener {
 
-		long inicio = 0;
-		Random r = new Random();
-		private MessageConsumer consumer = null;
-		private Session session = null;
-		private Connection connection = null;
+		private Connection conexao = null;
+		private Session sessao = null;
+		private MessageConsumer consumidor = null;
 		private ConectorAtivacaoImpl conector = null;
 
-		private void setConector(ConectorAtivacaoImpl conector) {
-			this.conector = conector;
-		}
-
+		/**
+		 * Abre conexão com a fila de mensagens
+		 */
 		private void conectarFila() {
+
 			try {
 
-				if (this.connection == null) {
-					// Create a ConnectionFactory
+				if (this.conexao == null) {
 					ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
-							"tcp://localhost:61616");
-
-					// Create a Connection
-					this.connection = connectionFactory.createConnection();
-					this.connection.start();
-
-					this.connection.setExceptionListener(this);
+							Ambiente.getURLBrokerJMS());
+					this.conexao = connectionFactory.createConnection();
+					this.conexao.start();
+					this.conexao.setExceptionListener(this);
 				}
 
-				if (session == null) {
-					// Create a Session
-					this.session = this.connection.createSession(false,
+				if (sessao == null) {
+					this.sessao = this.conexao.createSession(false,
 							Session.AUTO_ACKNOWLEDGE);
 				}
 
-				if (this.consumer == null) {
-					// Create the destination (Topic or Queue)
-					Destination destination = this.session
-							.createQueue("requisicoes");
-
-					// Create a MessageConsumer from the Session to the Topic or
-					// Queue
-					this.consumer = this.session.createConsumer(destination);
+				if (this.consumidor == null) {
+					Destination destination = this.sessao.createQueue(Ambiente
+							.getNomeFila());
+					this.consumidor = this.sessao.createConsumer(destination);
 				}
 			} catch (Exception e) {
+				Log.registrar(e);
 				desconectarFila();
-				System.out.println("Caught: " + e);
-				e.printStackTrace();
 			}
 		}
 
+		/**
+		 * Fecha conexão com a fila de mensagem
+		 */
 		private void desconectarFila() {
+
 			try {
-				if (this.consumer != null) {
-					this.consumer.close();
-					this.consumer = null;
+
+				if (this.consumidor != null) {
+					this.consumidor.close();
+					this.consumidor = null;
 				}
-				if (this.session != null) {
-					this.session.close();
-					this.session = null;
+				if (this.sessao != null) {
+					this.sessao.close();
+					this.sessao = null;
 				}
-				if (this.connection != null) {
-					this.connection.close();
-					this.connection = null;
+				if (this.conexao != null) {
+					this.conexao.close();
+					this.conexao = null;
 				}
-			} catch (JMSException e) {
-				System.out.println("Caught: " + e);
-				e.printStackTrace();
+			} catch (Exception e) {
+				Log.registrar(e);
 			}
 		}
 
+		/**
+		 * Consome a fila de mensagens com delay que varia de 1 a 1.5s entre
+		 * mensagens, simulando o cenário de negócio. A fila é consumida se o
+		 * respectivo conector indicar que a está ativo.
+		 */
 		public void run() {
 
 			try {
+
+				Random intervaloMilisegundos = new Random();
 
 				while (!Thread.currentThread().isInterrupted()) {
 
@@ -105,42 +113,47 @@ public class ExecutorConsulta {
 						continue;
 					}
 
-					inicio = System.currentTimeMillis();
+					long momentoInicio = System.currentTimeMillis();
+					Thread.sleep(500 + intervaloMilisegundos.nextInt(1000));
 
-					// Wait for a message
-					Message message = this.consumer.receive(1000);
-
-					if (message != null) {
-
-						if (message instanceof TextMessage) {
-							TextMessage textMessage = (TextMessage) message;
-							String text = textMessage.getText();
-							System.out.println("Received: " + text);
-						} else {
-							System.out.println("Received: " + message);
+					// recupera mensagem da fila
+					Message mensagem = this.consumidor.receive(1000);
+					if (mensagem != null) {
+						if (mensagem instanceof TextMessage) {
+							System.out
+									.println("["
+											+ (System.currentTimeMillis() - momentoInicio)
+											+ "] Recebido: "
+											+ ((TextMessage) mensagem)
+													.getText());
 						}
-
-						Thread.sleep(500 + r.nextInt(1000));
-
-						System.out.println("> tempo="
-								+ (System.currentTimeMillis() - inicio));
 					}
 				}
 			} catch (Exception e) {
+				Log.registrar(e);
 				desconectarFila();
-				System.out.println("Caught: " + e);
-				e.printStackTrace();
 			}
 		}
 
-		public synchronized void onException(JMSException ex) {
-			System.out.println("JMS Exception occured.  Shutting down client.");
+		public synchronized void onException(JMSException e) {
+			Log.registrar(e);
 		}
 	}
 
+	/**
+	 * Registra um conector {@link ConectorAtivacaoImpl} para uma instância da
+	 * aplicação
+	 * 
+	 * @param nomeInstancia
+	 *            Identificador da instância do executor
+	 * @return Retorna a instância do conector criada
+	 */
 	private static ConectorAtivacaoImpl registrarConector(String nomeInstancia) {
+
 		ConectorAtivacaoImpl conector = null;
+
 		try {
+
 			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 			ObjectName nome = new ObjectName("ExecutorConsulta:name="
 					+ nomeInstancia);
@@ -148,12 +161,18 @@ public class ExecutorConsulta {
 			StandardMBean mbean = new StandardMBean(conector,
 					ConectorAtivacao.class);
 			mbs.registerMBean(mbean, nome);
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.registrar(e);
 		}
 		return conector;
 	}
 
+	/**
+	 * Torna executável a aplicação. Informar a varíavel de ambiente
+	 * {@code ExecutorConsulta.nomeInstancia} para identificar o nome da
+	 * instância.
+	 */
 	public static void main(String[] args) {
 
 		String nomeInstancia = System
@@ -161,7 +180,7 @@ public class ExecutorConsulta {
 		nomeInstancia = (nomeInstancia != null ? nomeInstancia : "instancia"
 				+ (new Random()).nextInt(100));
 		ConsumidorFila consumidor = new ConsumidorFila();
-		consumidor.setConector(registrarConector(nomeInstancia));
+		consumidor.conector = registrarConector(nomeInstancia);
 		Thread brokerThread = new Thread(consumidor);
 		brokerThread.setDaemon(false);
 		brokerThread.start();

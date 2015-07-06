@@ -1,3 +1,5 @@
 - Refatorar o projeto;
 - Implementar conectores;
+- Permitir alterar a quantidade de consultas geradas na fila em tempo de execução;
+- Criar scripts para inicializar as aplicações;
 - Implementar os agentes;
