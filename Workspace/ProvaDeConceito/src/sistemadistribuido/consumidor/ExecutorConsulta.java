@@ -1,4 +1,4 @@
-package executor;
+package sistemadistribuido.consumidor;
 
 import java.lang.management.ManagementFactory;
 import java.util.Random;
@@ -17,8 +17,8 @@ import javax.management.StandardMBean;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-import conector.ConectorAtivacao;
-import conector.ConectorAtivacaoImpl;
+import sistemadistribuido.conector.ConectorAtivacao;
+import sistemadistribuido.conector.ConectorAtivacaoImpl;
 
 public class ExecutorConsulta {
 

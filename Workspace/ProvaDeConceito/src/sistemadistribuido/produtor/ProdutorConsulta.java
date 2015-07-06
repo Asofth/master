@@ -1,4 +1,4 @@
-package produtor;
+package sistemadistribuido.produtor;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;

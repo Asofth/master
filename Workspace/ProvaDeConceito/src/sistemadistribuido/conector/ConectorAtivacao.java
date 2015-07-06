@@ -1,4 +1,4 @@
-package conector;
+package sistemadistribuido.conector;
 
 public interface ConectorAtivacao {
 

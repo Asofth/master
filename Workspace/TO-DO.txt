@@ -1,0 +1,3 @@
+- Refatorar o projeto;
+- Implementar conectores;
+- Implementar os agentes;
