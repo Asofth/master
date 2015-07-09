@@ -38,16 +38,23 @@ public class SimuladorCliente {
 		private long tempoEntreMudancaEmMilisegundos = (1 * 60 * 1000);
 		private long[] intervaloEntreMensagensEmMilisegundos = { 2000l, 1000l,
 				500l, 250l, 500l, 1000l };
-		private int posIntervaloAtual = 0;
+		private Integer posIntervaloAtual = 0;
 		private long ultimaMudanca = System.currentTimeMillis();
 		private ConectorProdutor conector = null;
+
+		public void reinicializar() {
+			synchronized (posIntervaloAtual) {
+				posIntervaloAtual = 0;
+				ultimaMudanca = System.currentTimeMillis();
+			}
+		}
 
 		/**
 		 * Retorna o intervalo de tempo entre mensagens a ser utilizado na
 		 * simulação do cenário de negócio. Este intervalo alterna de tempo em
 		 * tempo para simular vários volumes.
 		 */
-		private long getIntervaloTempoAtual() {
+		public long getIntervaloTempoAtualMilisegundos() {
 
 			if ((ultimaMudanca + tempoEntreMudancaEmMilisegundos) < System
 					.currentTimeMillis()) {
@@ -90,11 +97,16 @@ public class SimuladorCliente {
 
 				while (!Thread.currentThread().isInterrupted()) {
 
-					Thread.sleep(this.getIntervaloTempoAtual());
+					if (!this.conector.isAtivo()) {
+						continue;
+					}
+
+					Thread.sleep(this.getIntervaloTempoAtualMilisegundos());
 
 					textoMensagem = "Requisicao=" + UUID.randomUUID();
 					produtor.send(sessao.createTextMessage(textoMensagem));
-					System.out.println("[" + (this.getIntervaloTempoAtual())
+					System.out.println("["
+							+ (this.getIntervaloTempoAtualMilisegundos())
 							+ "ms] Enviado: " + textoMensagem);
 				}
 
@@ -120,12 +132,9 @@ public class SimuladorCliente {
 	/**
 	 * Registra um conector {@link ConectorAtivacaoImpl} para uma instância da
 	 * aplicação
-	 * 
-	 * @param nomeInstancia
-	 *            Identificador da instância do executor
-	 * @return Retorna a instância do conector criada
 	 */
-	private static ConectorProdutor registrarConector(String nomeInstancia) {
+	private static ConectorProdutor registrarConector(String nomeInstancia,
+			ProdutorFila produtor) {
 
 		ConectorProdutorImpl conector = null;
 
@@ -135,7 +144,7 @@ public class SimuladorCliente {
 			ObjectName nome = new ObjectName(
 					ExecutorConsulta.class.getSimpleName() + ":name="
 							+ nomeInstancia);
-			conector = new ConectorProdutorImpl();
+			conector = new ConectorProdutorImpl(produtor);
 			StandardMBean mbean = new StandardMBean(conector,
 					ConectorProdutor.class);
 			mbs.registerMBean(mbean, nome);
@@ -152,7 +161,8 @@ public class SimuladorCliente {
 	public static void main(String[] args) {
 
 		ProdutorFila produtor = new ProdutorFila();
-		produtor.conector = registrarConector(Ambiente.getNomeInstancia());
+		produtor.conector = registrarConector(Ambiente.getNomeInstancia(),
+				produtor);
 		Thread brokerThread = new Thread(produtor);
 		brokerThread.setDaemon(false);
 		brokerThread.start();

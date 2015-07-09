@@ -144,10 +144,6 @@ public class ExecutorConsulta {
 	/**
 	 * Registra um conector {@link ConectorAtivacaoImpl} para uma instância da
 	 * aplicação
-	 * 
-	 * @param nomeInstancia
-	 *            Identificador da instância do executor
-	 * @return Retorna a instância do conector criada
 	 */
 	private static ConectorAtivacao registrarConector(String nomeInstancia,
 			boolean instanciaAtiva) {

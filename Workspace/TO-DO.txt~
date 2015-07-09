@@ -1,3 +1,4 @@
-- Refatorar o projeto;
-- Implementar conectores;
 - Implementar os agentes;
+	- Implementar para permitir publicar eventos no agente controlador;
+	- Implementar regras para ativação;
+- Implementar dashboard para visualização
