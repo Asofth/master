@@ -52,7 +52,7 @@ public class AgenteControlador extends Agent {
 		super.setup();
 		super.addBehaviour(new ProcessadorEvento());
 
-		DFUtil.register(this, SESSION_ID);
+		DFUtil.register(this);
 	}
 
 	@Override

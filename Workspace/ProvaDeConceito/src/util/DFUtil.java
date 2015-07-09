@@ -21,13 +21,13 @@ public class DFUtil {
 		return agentClass.getSimpleName() + TYPE_DESCRIPTION + "_" + sessionID;
 	}
 
-	public static void register(Agent agent, long sessionID) {
+	public static void register(Agent agent) {
 
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(agent.getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setName(getAgentName(agent.getClass(), sessionID));
-		sd.setType(getAgentType(agent.getClass(), sessionID));
+		sd.setName(getAgentName(agent.getClass(), 1L));
+		sd.setType(getAgentType(agent.getClass(), 1L));
 		dfd.addServices(sd);
 		try {
 			DFService.register(agent, dfd);
@@ -48,12 +48,12 @@ public class DFUtil {
 	}
 
 	public static AID search(Agent currentAgent,
-			Class<? extends Agent> agentClassToSearch, long sessionID) {
+			Class<? extends Agent> agentClassToSearch) {
 
 		DFAgentDescription dfd = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
-		sd.setName(getAgentName(agentClassToSearch, sessionID));
-		sd.setType(getAgentType(agentClassToSearch, sessionID));
+		sd.setName(getAgentName(agentClassToSearch, 1L));
+		sd.setType(getAgentType(agentClassToSearch, 1L));
 		dfd.addServices(sd);
 		try {
 			DFAgentDescription[] results = DFService.search(currentAgent, dfd);
