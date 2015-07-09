@@ -21,6 +21,7 @@ import sistemadistribuido.consumidor.conector.ConectorAtivacao;
 import sistemadistribuido.consumidor.conector.ConectorAtivacaoImpl;
 import util.Ambiente;
 import util.Log;
+import util.Ambiente.Atributo;
 
 /**
  * Aplicação consumidora da fila de mensagens.
@@ -36,7 +37,7 @@ public class ExecutorConsulta {
 		private Connection conexao = null;
 		private Session sessao = null;
 		private MessageConsumer consumidor = null;
-		private ConectorAtivacaoImpl conector = null;
+		private ConectorAtivacao conector = null;
 
 		/**
 		 * Abre conexão com a fila de mensagens
@@ -47,7 +48,7 @@ public class ExecutorConsulta {
 
 				if (this.conexao == null) {
 					ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
-							Ambiente.getURLBrokerJMS());
+							Ambiente.getAtributo(Atributo.JMS_BROKER_URL));
 					this.conexao = connectionFactory.createConnection();
 					this.conexao.start();
 					this.conexao.setExceptionListener(this);
@@ -60,7 +61,7 @@ public class ExecutorConsulta {
 
 				if (this.consumidor == null) {
 					Destination destination = this.sessao.createQueue(Ambiente
-							.getNomeFila());
+							.getAtributo(Atributo.JMS_BROKER_QUEUE_NAME));
 					this.consumidor = this.sessao.createConsumer(destination);
 				}
 			} catch (Exception e) {
@@ -123,7 +124,7 @@ public class ExecutorConsulta {
 							System.out
 									.println("["
 											+ (System.currentTimeMillis() - momentoInicio)
-											+ "] Recebido: "
+											+ "ms] Recebido: "
 											+ ((TextMessage) mensagem)
 													.getText());
 						}
@@ -148,16 +149,18 @@ public class ExecutorConsulta {
 	 *            Identificador da instância do executor
 	 * @return Retorna a instância do conector criada
 	 */
-	private static ConectorAtivacaoImpl registrarConector(String nomeInstancia) {
+	private static ConectorAtivacao registrarConector(String nomeInstancia,
+			boolean instanciaAtiva) {
 
 		ConectorAtivacaoImpl conector = null;
 
 		try {
 
 			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-			ObjectName nome = new ObjectName("ExecutorConsulta:name="
-					+ nomeInstancia);
-			conector = new ConectorAtivacaoImpl();
+			ObjectName nome = new ObjectName(
+					ExecutorConsulta.class.getSimpleName() + ":name="
+							+ nomeInstancia);
+			conector = new ConectorAtivacaoImpl(instanciaAtiva);
 			StandardMBean mbean = new StandardMBean(conector,
 					ConectorAtivacao.class);
 			mbs.registerMBean(mbean, nome);
@@ -175,15 +178,15 @@ public class ExecutorConsulta {
 	 */
 	public static void main(String[] args) {
 
-		String nomeInstancia = System
-				.getProperty("ExecutorConsulta.nomeInstancia");
-		nomeInstancia = (nomeInstancia != null ? nomeInstancia : "instancia"
-				+ (new Random()).nextInt(100));
 		ConsumidorFila consumidor = new ConsumidorFila();
-		consumidor.conector = registrarConector(nomeInstancia);
+		consumidor.conector = registrarConector(Ambiente.getNomeInstancia(),
+				Ambiente.isInstanciaAtiva());
 		Thread brokerThread = new Thread(consumidor);
 		brokerThread.setDaemon(false);
 		brokerThread.start();
+
+		System.out.println("Executor " + consumidor.conector.getNomeInstancia()
+				+ " iniciado!");
 	}
 
 }

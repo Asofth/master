@@ -6,6 +6,12 @@ package sistemadistribuido.consumidor.conector;
  */
 public interface ConectorAtivacao {
 
-	public void setAtivo(boolean ativo);
+	public void ativar();
+
+	public void inativar();
+
+	public boolean isAtivo();
+
+	public String getNomeInstancia();
 
 }
