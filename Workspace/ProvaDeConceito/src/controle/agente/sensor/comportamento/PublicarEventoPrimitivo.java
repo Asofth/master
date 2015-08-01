@@ -1,6 +1,5 @@
 package controle.agente.sensor.comportamento;
 
-import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
@@ -11,7 +10,7 @@ import controle.agente.AgenteControlador;
 import controle.evento.EventoPrimitivo;
 
 public abstract class PublicarEventoPrimitivo<T extends EventoPrimitivo>
-		extends CyclicBehaviour {
+		extends Comportamento {
 
 	private static final long serialVersionUID = -1969910869557015465L;
 
@@ -42,7 +41,6 @@ public abstract class PublicarEventoPrimitivo<T extends EventoPrimitivo>
 		} catch (IOException e) {
 			Log.registrar(e);
 		}
-
 	}
 
 	public abstract T coletarEvento();

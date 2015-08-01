@@ -21,5 +21,11 @@
 	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.7.10.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.10.jar"/>
 	<classpathentry kind="lib" path="lib/jade.jar"/>
+	<classpathentry kind="lib" path="lib/drools-compiler-6.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/drools-core-6.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/drools-decisiontables-6.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/drools-jsr94-6.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/drools-persistence-jpa-6.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/drools-templates-6.0.0.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

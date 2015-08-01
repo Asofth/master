@@ -19,6 +19,6 @@ public class EventoNumeroMensagensFila extends EventoPrimitivo {
 	@Override
 	public String toString() {
 		return "numeroMensagensFila=" + numeroMensagensFila;
-	}
+	}	
 	
 }

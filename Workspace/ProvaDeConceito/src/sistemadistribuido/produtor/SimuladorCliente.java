@@ -21,7 +21,7 @@ import sistemadistribuido.consumidor.conector.ConectorAtivacaoImpl;
 import sistemadistribuido.produtor.conector.ConectorProdutor;
 import sistemadistribuido.produtor.conector.ConectorProdutorImpl;
 import util.Ambiente;
-import util.Ambiente.Atributo;
+import util.Ambiente.AtributoFila;
 import util.Log;
 
 /**
@@ -83,13 +83,13 @@ public class SimuladorCliente {
 			try {
 
 				ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
-						Ambiente.getAtributo(Atributo.JMS_BROKER_URL));
+						Ambiente.getAtributo(AtributoFila.JMS_BROKER_URL.getValue()));
 				conexao = connectionFactory.createConnection();
 				conexao.start();
 				sessao = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 				Destination destination = sessao.createQueue(Ambiente
-						.getAtributo(Atributo.JMS_BROKER_QUEUE_NAME));
+						.getAtributo(AtributoFila.JMS_BROKER_QUEUE_NAME.getValue()));
 				produtor = sessao.createProducer(destination);
 				produtor.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 

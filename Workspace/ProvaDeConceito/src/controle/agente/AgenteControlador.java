@@ -38,8 +38,9 @@ public class AgenteControlador extends Agent {
 							.getContentObject();
 					System.out.println(new Date() + " - Evento enviado do IP "
 							+ evento.getIpOrigem() + " em "
-							+ evento.getDataHora() + "): " + evento.toString());
-
+							+ evento.getDataHora() + "): "
+							+ evento.getIdentificador() + " - "
+							+ evento.toString());
 				}
 			} catch (Exception e) {
 				Log.registrar(e);

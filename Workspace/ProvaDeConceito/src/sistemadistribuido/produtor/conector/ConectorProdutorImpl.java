@@ -1,7 +1,7 @@
 package sistemadistribuido.produtor.conector;
 
 import sistemadistribuido.produtor.SimuladorCliente;
-import util.ActiveMQUtil;
+import util.JMXUtil;
 import util.Ambiente;
 import util.Log;
 
@@ -9,7 +9,7 @@ public class ConectorProdutorImpl implements ConectorProdutor {
 
 	private Boolean ativo = true;
 
-	private ActiveMQUtil activeMQ = new ActiveMQUtil();
+	private JMXUtil activeMQ = new JMXUtil();
 	private SimuladorCliente.ProdutorFila produtor = null;
 
 	public ConectorProdutorImpl() {
@@ -65,8 +65,8 @@ public class ConectorProdutorImpl implements ConectorProdutor {
 	public Long getNumeroMensagens() {
 
 		try {
-			return (Long) this.activeMQ.executeMethodQueueViewMBean(
-					ActiveMQUtil.QueueMethod.QUEUE_SIZE, null);
+			return (Long) this.activeMQ.invocarMetodoFila(
+					JMXUtil.MetodoFila.QUEUE_SIZE, null);
 		} catch (Exception e) {
 			Log.registrar(e);
 		}
@@ -77,8 +77,8 @@ public class ConectorProdutorImpl implements ConectorProdutor {
 	public Long getNumeroConsumidores() {
 
 		try {
-			return (Long) this.activeMQ.executeMethodQueueViewMBean(
-					ActiveMQUtil.QueueMethod.CONSUMER_COUNT, null);
+			return (Long) this.activeMQ.invocarMetodoFila(
+					JMXUtil.MetodoFila.CONSUMER_COUNT, null);
 		} catch (Exception e) {
 			Log.registrar(e);
 		}

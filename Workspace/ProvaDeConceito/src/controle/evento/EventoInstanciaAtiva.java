@@ -6,19 +6,12 @@ public class EventoInstanciaAtiva extends EventoPrimitivo {
 
 	private String identificadorInstanciaAtiva;
 
-	public EventoInstanciaAtiva(String identificador,
-			String identificadorInstanciaAtiva) {
+	public EventoInstanciaAtiva(String identificador) {
 		super(identificador);
-		this.identificadorInstanciaAtiva = identificadorInstanciaAtiva;
 	}
 
 	public String getIdentificadorInstanciaAtiva() {
 		return identificadorInstanciaAtiva;
-	}
-
-	@Override
-	public String toString() {
-		return "identificadorInstanciaAtiva=" + identificadorInstanciaAtiva;
 	}
 
 }

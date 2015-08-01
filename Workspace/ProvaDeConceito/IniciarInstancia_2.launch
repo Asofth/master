@@ -12,5 +12,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="sistemadistribuido.consumidor.ExecutorConsulta"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ProvaDeConceito"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.rmi.server.hostname=localhost &#10;-Dcom.sun.management.jmxremote.port=7772 &#10;-Dcom.sun.management.jmxremote.authenticate=false &#10;-Dcom.sun.management.jmxremote.ssl=false &#10;-DnomeInstancia=executor2 &#10;-DinstanciaAtiva=false"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.rmi.server.hostname=localhost &#10;-Dcom.sun.management.jmxremote.port=7772 &#10;-Dcom.sun.management.jmxremote.authenticate=false &#10;-Dcom.sun.management.jmxremote.ssl=false &#10;-DnomeInstancia=EXECUTOR_INSTANCIA_2&#10;-DinstanciaAtiva=false"/>
 </launchConfiguration>

@@ -12,6 +12,7 @@ import javax.jms.MessageConsumer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.StandardMBean;
 
@@ -21,7 +22,7 @@ import sistemadistribuido.consumidor.conector.ConectorAtivacao;
 import sistemadistribuido.consumidor.conector.ConectorAtivacaoImpl;
 import util.Ambiente;
 import util.Log;
-import util.Ambiente.Atributo;
+import util.Ambiente.AtributoFila;
 
 /**
  * Aplicação consumidora da fila de mensagens.
@@ -48,7 +49,7 @@ public class ExecutorConsulta {
 
 				if (this.conexao == null) {
 					ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
-							Ambiente.getAtributo(Atributo.JMS_BROKER_URL));
+							Ambiente.getAtributo(AtributoFila.JMS_BROKER_URL.getValue()));
 					this.conexao = connectionFactory.createConnection();
 					this.conexao.start();
 					this.conexao.setExceptionListener(this);
@@ -61,7 +62,7 @@ public class ExecutorConsulta {
 
 				if (this.consumidor == null) {
 					Destination destination = this.sessao.createQueue(Ambiente
-							.getAtributo(Atributo.JMS_BROKER_QUEUE_NAME));
+							.getAtributo(AtributoFila.JMS_BROKER_QUEUE_NAME.getValue()));
 					this.consumidor = this.sessao.createConsumer(destination);
 				}
 			} catch (Exception e) {
@@ -153,13 +154,10 @@ public class ExecutorConsulta {
 		try {
 
 			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-			ObjectName nome = new ObjectName(
-					ExecutorConsulta.class.getSimpleName() + ":name="
-							+ nomeInstancia);
 			conector = new ConectorAtivacaoImpl(instanciaAtiva);
 			StandardMBean mbean = new StandardMBean(conector,
 					ConectorAtivacao.class);
-			mbs.registerMBean(mbean, nome);
+			mbs.registerMBean(mbean, getJMXObjectName(nomeInstancia));
 
 		} catch (Exception e) {
 			Log.registrar(e);
@@ -167,6 +165,12 @@ public class ExecutorConsulta {
 		return conector;
 	}
 
+	public static ObjectName getJMXObjectName(String nomeInstancia) throws MalformedObjectNameException {
+		return new ObjectName(
+				ExecutorConsulta.class.getSimpleName() + ":name="
+						+ nomeInstancia);
+	}
+	
 	/**
 	 * Torna executável a aplicação. Informar a varíavel de ambiente
 	 * {@code ExecutorConsulta.nomeInstancia} para identificar o nome da

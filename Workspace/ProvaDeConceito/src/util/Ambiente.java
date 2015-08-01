@@ -7,16 +7,16 @@ import java.util.Properties;
  */
 public class Ambiente {
 
-	public enum Atributo {
+	public enum AtributoFila {
 
-		JMS_BROKER_URL("jms.broker.url"), JMS_BROKER_JMX_HOST(
-				"jms.broker.jmx.host"), JMS_BROKER_USER("jms.broker.user"), JMS_BROKER_PASSWORD(
-				"jms.broker.password"), JMS_BROKER_NAME("jms.broker.name"), JMS_BROKER_QUEUE_NAME(
-				"jms.broker.queue.name");
+		JMS_BROKER_URL("elemento.monitorado.FILA_MENSAGEM.jms.broker.url"), JMS_BROKER_JMX_HOST(
+				"elemento.monitorado.FILA_MENSAGEM.jmx.host"), JMS_BROKER_USER("elemento.monitorado.FILA_MENSAGEM.jms.broker.user"), JMS_BROKER_PASSWORD(
+				"elemento.monitorado.FILA_MENSAGEM.jms.broker.password"), JMS_BROKER_NAME("elemento.monitorado.FILA_MENSAGEM.jmx.name"), JMS_BROKER_QUEUE_NAME(
+				"elemento.monitorado.FILA_MENSAGEM.jms.broker.queue.name");
 
 		private String value;
 
-		private Atributo(String value) {
+		private AtributoFila(String value) {
 			this.value = value;
 		}
 
@@ -35,8 +35,8 @@ public class Ambiente {
 		}
 	}
 
-	public static String getAtributo(Atributo atributo) {
-		return atributosAmbiente.getProperty(atributo.getValue());
+	public static String getAtributo(String nome) {
+		return atributosAmbiente.getProperty(nome);
 	}
 
 	/**
