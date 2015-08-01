@@ -23,9 +23,17 @@ public class AgenteInicializadorInstanciaExecutor extends Agent {
 				ACLMessage msgReceived = super.myAgent.receive();
 				if (msgReceived != null) {
 
+					String elementoGerenciado = msgReceived.getContent();
+
+					if ((Boolean) instancia
+							.invocarMetodoInstanciaExecutorConsulta(
+									JMXUtil.MetodoInstancia.IS_ATIVO,
+									elementoGerenciado)) {
+						return;
+					}
+
 					instancia.invocarMetodoInstanciaExecutorConsulta(
-							JMXUtil.MetodoInstancia.ATIVAR,
-							super.getNomeElementoGerenciado("INICIALIZADOR_"));
+							JMXUtil.MetodoInstancia.ATIVAR, elementoGerenciado);
 				}
 			} catch (Exception e) {
 				Log.registrar(e);

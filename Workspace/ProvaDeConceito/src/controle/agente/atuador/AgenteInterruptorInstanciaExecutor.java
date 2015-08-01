@@ -23,9 +23,18 @@ public class AgenteInterruptorInstanciaExecutor extends Agent {
 				ACLMessage msgReceived = super.myAgent.receive();
 				if (msgReceived != null) {
 
+					String elementoGerenciado = msgReceived.getContent();
+
+					if (!(Boolean) instancia
+							.invocarMetodoInstanciaExecutorConsulta(
+									JMXUtil.MetodoInstancia.IS_ATIVO,
+									elementoGerenciado)) {
+						return;
+					}
+
 					instancia.invocarMetodoInstanciaExecutorConsulta(
 							JMXUtil.MetodoInstancia.INATIVAR,
-							super.getNomeElementoGerenciado("INTERRUPTOR_"));
+							elementoGerenciado);
 				}
 			} catch (Exception e) {
 				Log.registrar(e);

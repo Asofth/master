@@ -1,8 +1,28 @@
 package controle.agente.atuador;
 
+import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
+import util.DFUtil;
+import util.Log;
+
 public class ControladorAtuacao {
 
-	public void ruleFired() {
-		System.out.println("EVENTO DETECTADO");
+	private Agent agenteControlador = null;
+
+	public ControladorAtuacao(Agent agenteControlador) {
+		this.agenteControlador = agenteControlador;
 	}
+
+	public void ruleFired(Class<? extends Agent> classeAgente, String mensagem) {
+		try {
+			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.setContent(mensagem);
+			// como identificar uma instancia especifica?
+			msg.addReceiver(DFUtil.search(this.agenteControlador, classeAgente));
+			this.agenteControlador.send(msg);
+		} catch (Exception e) {
+			Log.registrar(e);
+		}
+	}
+
 }

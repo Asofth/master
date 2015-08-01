@@ -41,7 +41,7 @@ public class AgenteControlador extends Agent {
 		private KnowledgeBase knowledgeBase = null;
 		private StatefulKnowledgeSession session = null;
 
-		public ProcessadorEvento() {
+		public ProcessadorEvento(AgenteControlador agente) {
 			super();
 
 			KnowledgeBuilder builder = KnowledgeBuilderFactory
@@ -67,10 +67,11 @@ public class AgenteControlador extends Agent {
 
 			this.session = knowledgeBase.newStatefulKnowledgeSession(
 					sessionConfig, null);
-			
-			//this.session.insert(arg0)
-			
-			this.session.setGlobal("controladorAtuacao", new ControladorAtuacao());
+
+			// this.session.insert(arg0)
+
+			this.session.setGlobal("controladorAtuacao",
+					new ControladorAtuacao(agente));
 
 		}
 
@@ -113,7 +114,7 @@ public class AgenteControlador extends Agent {
 	@Override
 	protected void setup() {
 		super.setup();
-		super.addBehaviour(new ProcessadorEvento());
+		super.addBehaviour(new ProcessadorEvento(this));
 
 		DFUtil.register(this);
 	}

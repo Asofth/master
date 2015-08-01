@@ -122,12 +122,12 @@ public class ExecutorConsulta {
 					Message mensagem = this.consumidor.receive(1000);
 					if (mensagem != null) {
 						if (mensagem instanceof TextMessage) {
-							System.out
-									.println("["
-											+ (System.currentTimeMillis() - momentoInicio)
-											+ "ms] Recebido: "
-											+ ((TextMessage) mensagem)
-													.getText());
+//							System.out
+//									.println("["
+//											+ (System.currentTimeMillis() - momentoInicio)
+//											+ "ms] Recebido: "
+//											+ ((TextMessage) mensagem)
+//													.getText());
 						}
 					}
 				}

@@ -105,9 +105,9 @@ public class SimuladorCliente {
 
 					textoMensagem = "Requisicao=" + UUID.randomUUID();
 					produtor.send(sessao.createTextMessage(textoMensagem));
-					System.out.println("["
-							+ (this.getIntervaloTempoAtualMilisegundos())
-							+ "ms] Enviado: " + textoMensagem);
+//					System.out.println("["
+//							+ (this.getIntervaloTempoAtualMilisegundos())
+//							+ "ms] Enviado: " + textoMensagem);
 				}
 
 			} catch (Exception e) {

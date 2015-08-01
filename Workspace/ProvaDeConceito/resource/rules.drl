@@ -1,5 +1,6 @@
 import controle.evento.*;
 import controle.dominio.*;
+import controle.agente.atuador.*
 
 global controle.agente.atuador.ControladorAtuacao controladorAtuacao;
 
@@ -10,14 +11,23 @@ end
 
 rule numeroMaximoMensagens
 when 
-	$evento : EventoNumeroMensagensFila(numeroMensagensFila > 10)
+	$evento : EventoNumeroMensagensFila(numeroMensagensFila > 100)
 	from entry-point "FluxoDeEventos"
 then
 	AtributoElementoGerenciado elemento = new AtributoElementoGerenciado($evento.getIdentificador(), Estado.ATIVO);
 	insert(elemento);
-	controladorAtuacao.ruleFired();
+	controladorAtuacao.ruleFired(AgenteInicializadorInstanciaExecutor.class, "EXECUTOR_INSTANCIA_2");
 end
 
+rule numeroMinimoMensagens
+when 
+	$evento : EventoNumeroMensagensFila(numeroMensagensFila < 100)
+	from entry-point "FluxoDeEventos"
+then
+	AtributoElementoGerenciado elemento = new AtributoElementoGerenciado($evento.getIdentificador(), Estado.ATIVO);
+	insert(elemento);
+	controladorAtuacao.ruleFired(AgenteInterruptorInstanciaExecutor.class, "EXECUTOR_INSTANCIA_2");
+end
 
 rule atualizaEstadoElementoFila
 when 
