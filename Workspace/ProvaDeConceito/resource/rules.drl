@@ -1,14 +1,29 @@
-declare asofth.prototype.event.QueueSizePrimitiveEvent
+import controle.evento.*;
+import controle.dominio.*;
+
+global controle.agente.atuador.ControladorAtuacao controladorAtuacao;
+
+declare EventoNumeroMensagensFila
 	@role( event )
 	@expires( 2s )
 end
 
-rule queueMaxSize
-	when 
-		$queueSizeEvent : asofth.prototype.event.QueueSizePrimitiveEvent(size > 10)
-		from entry-point "QueueStream"
-	then
-		modify ($queueSizeEvent) {
-			ruleFired()
-		};
+rule numeroMaximoMensagens
+when 
+	$evento : EventoNumeroMensagensFila(numeroMensagensFila > 10)
+	from entry-point "FluxoDeEventos"
+then
+	AtributoElementoGerenciado elemento = new AtributoElementoGerenciado($evento.getIdentificador(), Estado.ATIVO);
+	insert(elemento);
+	controladorAtuacao.ruleFired();
+end
+
+
+rule atualizaEstadoElementoFila
+when 
+    $evento : EventoNumeroMensagensFila(identificador != null)
+	from entry-point "FluxoDeEventos"
+	$elemento : AtributoElementoGerenciado(identificador == $evento.getIdentificador());
+then
+	$elemento.setEstado(Estado.ATIVO);
 end

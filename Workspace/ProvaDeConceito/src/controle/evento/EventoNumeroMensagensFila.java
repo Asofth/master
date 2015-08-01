@@ -20,5 +20,5 @@ public class EventoNumeroMensagensFila extends EventoPrimitivo {
 	public String toString() {
 		return "numeroMensagensFila=" + numeroMensagensFila;
 	}	
-	
+
 }
