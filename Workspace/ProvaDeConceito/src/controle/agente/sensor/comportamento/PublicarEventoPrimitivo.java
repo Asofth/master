@@ -25,8 +25,8 @@ public abstract class PublicarEventoPrimitivo<T extends EventoPrimitivo>
 				msg.setContentObject(eventoPrimitivo);
 				msg.addReceiver(DFUtil.search(super.myAgent,
 						AgenteControlador.class));
-				System.out.println("Publicando Evento: "
-						+ eventoPrimitivo.toString());
+//				System.out.println("Publicando Evento: "
+//						+ eventoPrimitivo.toString());
 				super.myAgent.send(msg);
 			}
 

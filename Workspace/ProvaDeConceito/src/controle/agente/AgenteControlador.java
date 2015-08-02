@@ -4,7 +4,6 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-import java.util.Date;
 import java.util.UUID;
 
 import org.kie.api.KieBaseConfiguration;
@@ -24,6 +23,8 @@ import org.kie.internal.runtime.StatefulKnowledgeSession;
 import util.DFUtil;
 import util.Log;
 import controle.agente.atuador.ControladorAtuacao;
+import controle.dominio.AtributoElementoGerenciado;
+import controle.dominio.Estado;
 import controle.evento.EventoPrimitivo;
 
 @SuppressWarnings("deprecation")
@@ -40,15 +41,23 @@ public class AgenteControlador extends Agent {
 
 		private KnowledgeBase knowledgeBase = null;
 		private StatefulKnowledgeSession session = null;
+		private EntryPoint queueStream = null;
 
 		public ProcessadorEvento(AgenteControlador agente) {
 			super();
 
 			KnowledgeBuilder builder = KnowledgeBuilderFactory
 					.newKnowledgeBuilder();
-
-			builder.add(ResourceFactory.newClassPathResource("rules.drl"),
+			// adiciona regras
+			builder.add(
+					ResourceFactory
+							.newClassPathResource("regrasAtualizacaoEstadosElementosGerenciados.drl"),
 					ResourceType.DRL);
+			builder.add(
+					ResourceFactory
+							.newClassPathResource("regrasReconfiguracaoElementosGerenciados.drl"),
+					ResourceType.DRL);
+			// checa erros
 			if (builder.hasErrors()) {
 				throw new RuntimeException(builder.getErrors().toString());
 			}
@@ -68,10 +77,31 @@ public class AgenteControlador extends Agent {
 			this.session = knowledgeBase.newStatefulKnowledgeSession(
 					sessionConfig, null);
 
-			// this.session.insert(arg0)
+			// inicializa elementos gerenciados
+			this.session.insert(new AtributoElementoGerenciado("FILA_MENSAGEM",
+					Estado.ATIVO));
 
 			this.session.setGlobal("controladorAtuacao",
 					new ControladorAtuacao(agente));
+
+			this.queueStream = this.session.getEntryPoint("FluxoDeEventos");
+
+			// inicializa em outra thread a avaliação dos eventos
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					while (!Thread.currentThread().isInterrupted()) {
+						AgenteControlador.ProcessadorEvento.this.session
+								.fireAllRules();
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							Log.registrar(e);
+						}
+					}
+				}
+			}).start();
 
 		}
 
@@ -89,19 +119,16 @@ public class AgenteControlador extends Agent {
 
 					EventoPrimitivo evento = (EventoPrimitivo) msgReceived
 							.getContentObject();
-					System.out.println(new Date() + " - Evento enviado do IP "
-							+ evento.getIpOrigem() + " em "
-							+ evento.getDataHora() + "): "
-							+ evento.getIdentificador() + " - "
-							+ evento.toString());
+					// System.out.println(new Date() +
+					// " - Evento enviado do IP "
+					// + evento.getIpOrigem() + " em "
+					// + evento.getDataHora() + "): "
+					// + evento.getIdentificador() + " - "
+					// + evento.toString());
 
 					if (evento instanceof EventoPrimitivo) {
-
-						EntryPoint queueStream = this.session
-								.getEntryPoint("FluxoDeEventos");
+						// System.out.println(evento.toString());
 						queueStream.insert(evento);
-						this.session.fireAllRules();
-
 					}
 				}
 
@@ -109,6 +136,7 @@ public class AgenteControlador extends Agent {
 				Log.registrar(e);
 			}
 		}
+
 	}
 
 	@Override

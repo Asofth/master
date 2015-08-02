@@ -1,0 +1,29 @@
+import controle.dominio.*;
+import controle.agente.atuador.*
+
+global controle.agente.atuador.ControladorAtuacao controladorAtuacao;
+
+rule "filaMensagensAtiva"
+activation-group "reconfiguracao"
+when 
+	$elemento : AtributoElementoGerenciado(identificador == "FILA_MENSAGEM" && estado == Estado.ATIVO);
+then
+	System.out.println("REGRA ATIVADA - ATIVO! " + $elemento.toString());
+end
+
+rule "filaMensagensEmAlerta"
+activation-group "reconfiguracao"
+when 
+	$elemento : AtributoElementoGerenciado(identificador == "FILA_MENSAGEM" && estado == Estado.ALERTA);
+then
+	System.out.println("REGRA ATIVADA - ALERTA! " + $elemento.toString());
+	//controladorAtuacao.ruleFired(AgenteInicializadorInstanciaExecutor.class, "EXECUTOR_INSTANCIA_2");
+end
+
+rule "filaMensagensCritica"
+activation-group "reconfiguracao"
+when 
+	$elemento : AtributoElementoGerenciado(identificador == "FILA_MENSAGEM" && estado == Estado.CRITICO);
+then
+	System.out.println("REGRA ATIVADA - CRITICO! " + $elemento.toString());
+end

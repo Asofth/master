@@ -1,0 +1,47 @@
+import controle.evento.*;
+import controle.dominio.*;
+import controle.agente.atuador.*
+
+declare EventoNumeroMensagensFila
+	@role( event )
+	@expires( 1s )
+end
+
+rule "estadoAtivoFilaMensagens"
+	activation-group "atualizacao-fila"
+	no-loop true
+when 
+	$evento : EventoNumeroMensagensFila(numeroMensagensFila <= 100)
+	from entry-point "FluxoDeEventos"
+	$elemento : AtributoElementoGerenciado(identificador == $evento.getIdentificador());
+then
+	modify ($elemento) {
+		setEstado(Estado.ATIVO);
+	}
+end
+
+rule "estadoAlertaFilaMensagens"
+	activation-group "atualizacao-fila"
+	no-loop true
+when 
+	$evento : EventoNumeroMensagensFila(numeroMensagensFila > 100 && numeroMensagensFila <= 200)
+	from entry-point "FluxoDeEventos"
+	$elemento : AtributoElementoGerenciado(identificador == $evento.getIdentificador());
+then
+	modify ($elemento) {
+		setEstado(Estado.ALERTA);
+	}
+end
+
+rule "estadoCriticoFilaMensagens"
+	activation-group "atualizacao-fila"
+	no-loop true
+when 
+	$evento : EventoNumeroMensagensFila(numeroMensagensFila > 200)
+	from entry-point "FluxoDeEventos"
+	$elemento : AtributoElementoGerenciado(identificador == $evento.getIdentificador());
+then
+	modify ($elemento) {
+		setEstado(Estado.CRITICO);
+	}
+end
