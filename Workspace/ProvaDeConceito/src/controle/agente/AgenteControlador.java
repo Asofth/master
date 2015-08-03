@@ -4,6 +4,8 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.kie.api.KieBaseConfiguration;
@@ -22,9 +24,16 @@ import org.kie.internal.runtime.StatefulKnowledgeSession;
 
 import util.DFUtil;
 import util.Log;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 import controle.agente.atuador.ControladorAtuacao;
-import controle.dominio.AtributoElementoGerenciado;
-import controle.dominio.Estado;
+import controle.dominio.Atributo;
+import controle.dominio.Computador;
+import controle.dominio.Localidade;
+import controle.dominio.Programa;
+import controle.dominio.SistemaControlado;
 import controle.evento.EventoPrimitivo;
 
 @SuppressWarnings("deprecation")
@@ -48,7 +57,8 @@ public class AgenteControlador extends Agent {
 
 			KnowledgeBuilder builder = KnowledgeBuilderFactory
 					.newKnowledgeBuilder();
-			// adiciona regras
+			
+			// adiciona bases de regras
 			builder.add(
 					ResourceFactory
 							.newClassPathResource("regrasAtualizacaoEstadosElementosGerenciados.drl"),
@@ -57,15 +67,12 @@ public class AgenteControlador extends Agent {
 					ResourceFactory
 							.newClassPathResource("regrasReconfiguracaoElementosGerenciados.drl"),
 					ResourceType.DRL);
-			// checa erros
 			if (builder.hasErrors()) {
 				throw new RuntimeException(builder.getErrors().toString());
 			}
-
 			KieBaseConfiguration kBaseConfig = KieServices.Factory.get()
 					.newKieBaseConfiguration();
 			kBaseConfig.setOption(EventProcessingOption.STREAM);
-
 			this.knowledgeBase = KnowledgeBaseFactory
 					.newKnowledgeBase(kBaseConfig);
 			knowledgeBase.addKnowledgePackages(builder.getKnowledgePackages());
@@ -73,17 +80,36 @@ public class AgenteControlador extends Agent {
 			KieSessionConfiguration sessionConfig = KieServices.Factory.get()
 					.newKieSessionConfiguration();
 			sessionConfig.setOption(ClockTypeOption.get("realtime"));
-
 			this.session = knowledgeBase.newStatefulKnowledgeSession(
 					sessionConfig, null);
 
 			// inicializa elementos gerenciados
-			this.session.insert(new AtributoElementoGerenciado("FILA_MENSAGEM",
-					Estado.ATIVO));
+			XStream stream = new XStream(new DomDriver());
+			stream.alias("SistemaControlado", SistemaControlado.class);
+			stream.alias("Programa", Programa.class);
+			stream.alias("Computador", Computador.class);
+			stream.alias("Atributo", Atributo.class);
+			stream.alias("Localidade", Localidade.class);
 
+			try {
+				SistemaControlado sistemaControlado = (SistemaControlado) stream
+						.fromXML(ResourceFactory.newClassPathResource(
+								"dominio.xml").getInputStream());
+				sistemaControlado.validar();
+				List<Atributo> atributos = sistemaControlado
+						.getListaAtributosGerenciados();
+				for (Atributo atributo : atributos) {
+					this.session.insert(atributo);
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+			// inicializa o controlador de atuação
 			this.session.setGlobal("controladorAtuacao",
 					new ControladorAtuacao(agente));
 
+			// inicializa fluxo de eventos
 			this.queueStream = this.session.getEntryPoint("FluxoDeEventos");
 
 			// inicializa em outra thread a avaliação dos eventos

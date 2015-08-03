@@ -4,8 +4,11 @@ import jade.core.Agent;
 import util.DFUtil;
 import util.JMXUtil;
 import controle.agente.sensor.comportamento.PublicarEventoPrimitivo;
+import controle.dominio.IdentificadorAtributoElementoGerenciado;
+import controle.dominio.IdentificadorElementoGerenciado;
 import controle.evento.EventoInstanciaAtiva;
 import controle.evento.EventoInstanciaInativa;
+import controle.evento.EventoNumeroMensagensFila;
 
 public class AgenteSensorInstanciaExecutor extends Agent {
 
@@ -31,8 +34,10 @@ public class AgenteSensorInstanciaExecutor extends Agent {
 				isAtivo = false;
 			}
 			if (isAtivo != null && isAtivo) {
+				
 				return new EventoInstanciaAtiva(
-						super.getNomeElementoGerenciado("SENSOR_"));
+						IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_1,
+						IdentificadorAtributoElementoGerenciado.INICIADO);
 			}
 			return null;
 		}
@@ -64,7 +69,8 @@ public class AgenteSensorInstanciaExecutor extends Agent {
 			}
 			if (isAtivo == null || !isAtivo) {
 				return new EventoInstanciaInativa(
-						super.getNomeElementoGerenciado("SENSOR_"));
+						IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_1,
+						IdentificadorAtributoElementoGerenciado.INICIADO);
 			}
 			return null;
 		}

@@ -4,26 +4,32 @@ import controle.agente.atuador.*
 global controle.agente.atuador.ControladorAtuacao controladorAtuacao;
 
 rule "filaMensagensAtiva"
-activation-group "reconfiguracao"
+	activation-group "reconfiguracao"
 when 
-	$elemento : AtributoElementoGerenciado(identificador == "FILA_MENSAGEM" && estado == Estado.ATIVO);
+	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
+							&& estadoAtual == Estado.NORMAL);
 then
-	System.out.println("REGRA ATIVADA - ATIVO! " + $elemento.toString());
+	System.out.println("REGRA ATIVADA - NORMAL! " + $elemento.toString());
 end
 
 rule "filaMensagensEmAlerta"
-activation-group "reconfiguracao"
+	activation-group "reconfiguracao"
 when 
-	$elemento : AtributoElementoGerenciado(identificador == "FILA_MENSAGEM" && estado == Estado.ALERTA);
+	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
+							&& estadoAtual == Estado.ALERTA);
 then
 	System.out.println("REGRA ATIVADA - ALERTA! " + $elemento.toString());
 	//controladorAtuacao.ruleFired(AgenteInicializadorInstanciaExecutor.class, "EXECUTOR_INSTANCIA_2");
 end
 
 rule "filaMensagensCritica"
-activation-group "reconfiguracao"
+	activation-group "reconfiguracao"
 when 
-	$elemento : AtributoElementoGerenciado(identificador == "FILA_MENSAGEM" && estado == Estado.CRITICO);
+	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
+							&& estadoAtual == Estado.CRITICO);
 then
 	System.out.println("REGRA ATIVADA - CRITICO! " + $elemento.toString());
 end

@@ -13,10 +13,11 @@ rule "estadoAtivoFilaMensagens"
 when 
 	$evento : EventoNumeroMensagensFila(numeroMensagensFila <= 100)
 	from entry-point "FluxoDeEventos"
-	$elemento : AtributoElementoGerenciado(identificador == $evento.getIdentificador());
+	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM);
 then
 	modify ($elemento) {
-		setEstado(Estado.ATIVO);
+		setEstadoAtual(Estado.NORMAL);
 	}
 end
 
@@ -26,10 +27,11 @@ rule "estadoAlertaFilaMensagens"
 when 
 	$evento : EventoNumeroMensagensFila(numeroMensagensFila > 100 && numeroMensagensFila <= 200)
 	from entry-point "FluxoDeEventos"
-	$elemento : AtributoElementoGerenciado(identificador == $evento.getIdentificador());
+	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM);
 then
 	modify ($elemento) {
-		setEstado(Estado.ALERTA);
+		setEstadoAtual(Estado.ALERTA);
 	}
 end
 
@@ -39,9 +41,10 @@ rule "estadoCriticoFilaMensagens"
 when 
 	$evento : EventoNumeroMensagensFila(numeroMensagensFila > 200)
 	from entry-point "FluxoDeEventos"
-	$elemento : AtributoElementoGerenciado(identificador == $evento.getIdentificador());
+	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM);
 then
 	modify ($elemento) {
-		setEstado(Estado.CRITICO);
+		setEstadoAtual(Estado.CRITICO);
 	}
 end

@@ -4,6 +4,8 @@ import jade.core.Agent;
 import util.JMXUtil;
 import util.DFUtil;
 import controle.agente.sensor.comportamento.PublicarEventoPrimitivo;
+import controle.dominio.IdentificadorAtributoElementoGerenciado;
+import controle.dominio.IdentificadorElementoGerenciado;
 import controle.evento.EventoNumeroMensagensFila;
 
 public class AgenteSensorFilaMensagem extends Agent {
@@ -20,7 +22,8 @@ public class AgenteSensorFilaMensagem extends Agent {
 		@Override
 		public EventoNumeroMensagensFila coletarEvento() {
 			return new EventoNumeroMensagensFila(
-					super.getNomeElementoGerenciado("SENSOR_"),
+					IdentificadorElementoGerenciado.FILA_MENSAGEM,
+					IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS,
 					(Long) filaMensagem.invocarMetodoFila(
 							JMXUtil.MetodoFila.QUEUE_SIZE, null));
 		}

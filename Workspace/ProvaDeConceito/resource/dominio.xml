@@ -1,0 +1,16 @@
+<SistemaControlado>
+	<programas>
+		<Programa>
+			<identificador>FILA_MENSAGEM</identificador>
+			<descricao>Active MQ</descricao>
+			<atributos>
+				<Atributo>
+					<identificador>NUMERO_MENSAGENS</identificador>
+					<descricao>Numero de mensagens pendentes para processamento</descricao>
+					<valorAtual></valorAtual>
+					<estadoAtual>NORMAL</estadoAtual>					
+				</Atributo>
+			</atributos>
+		</Programa>
+	</programas>
+</SistemaControlado>

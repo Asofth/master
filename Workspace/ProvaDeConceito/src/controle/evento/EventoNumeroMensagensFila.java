@@ -1,14 +1,20 @@
 package controle.evento;
 
+import controle.dominio.IdentificadorAtributoElementoGerenciado;
+import controle.dominio.IdentificadorElementoGerenciado;
+
 public class EventoNumeroMensagensFila extends EventoPrimitivo {
 
 	private static final long serialVersionUID = 6120581406971018787L;
 
 	private Long numeroMensagensFila;
 
-	public EventoNumeroMensagensFila(String identificador,
+	public EventoNumeroMensagensFila(
+			IdentificadorElementoGerenciado identificadorElementoGerenciado,
+			IdentificadorAtributoElementoGerenciado identificadorAtributoElementoGerenciado,
 			Long numeroMensagensFila) {
-		super(identificador);
+		super(identificadorElementoGerenciado,
+				identificadorAtributoElementoGerenciado);
 		this.numeroMensagensFila = numeroMensagensFila;
 	}
 
@@ -19,6 +25,6 @@ public class EventoNumeroMensagensFila extends EventoPrimitivo {
 	@Override
 	public String toString() {
 		return "numeroMensagensFila=" + numeroMensagensFila;
-	}	
+	}
 
 }
