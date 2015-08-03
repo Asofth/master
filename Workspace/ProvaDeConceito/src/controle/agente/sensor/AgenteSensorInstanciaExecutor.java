@@ -8,7 +8,6 @@ import controle.dominio.IdentificadorAtributoElementoGerenciado;
 import controle.dominio.IdentificadorElementoGerenciado;
 import controle.evento.EventoInstanciaAtiva;
 import controle.evento.EventoInstanciaInativa;
-import controle.evento.EventoNumeroMensagensFila;
 
 public class AgenteSensorInstanciaExecutor extends Agent {
 
@@ -29,15 +28,16 @@ public class AgenteSensorInstanciaExecutor extends Agent {
 				isAtivo = (Boolean) instancia
 						.invocarMetodoInstanciaExecutorConsulta(
 								JMXUtil.MetodoInstancia.IS_ATIVO,
-								super.getNomeElementoGerenciado("SENSOR_"));
+								super.getNomeElementoGerenciado());
 			} catch (RuntimeException e) {
 				isAtivo = false;
 			}
 			if (isAtivo != null && isAtivo) {
-				
+
 				return new EventoInstanciaAtiva(
-						IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_1,
-						IdentificadorAtributoElementoGerenciado.INICIADO);
+						IdentificadorElementoGerenciado.getByName(super
+								.getNomeElementoGerenciado()),
+						IdentificadorAtributoElementoGerenciado.STATUS);
 			}
 			return null;
 		}
@@ -63,14 +63,15 @@ public class AgenteSensorInstanciaExecutor extends Agent {
 				isAtivo = (Boolean) instancia
 						.invocarMetodoInstanciaExecutorConsulta(
 								JMXUtil.MetodoInstancia.IS_ATIVO,
-								super.getNomeElementoGerenciado("SENSOR_"));
+								super.getNomeElementoGerenciado());
 			} catch (RuntimeException e) {
 				isAtivo = false;
 			}
 			if (isAtivo == null || !isAtivo) {
 				return new EventoInstanciaInativa(
-						IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_1,
-						IdentificadorAtributoElementoGerenciado.INICIADO);
+						IdentificadorElementoGerenciado.getByName(super
+								.getNomeElementoGerenciado()),
+						IdentificadorAtributoElementoGerenciado.STATUS);
 			}
 			return null;
 		}

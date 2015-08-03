@@ -7,6 +7,16 @@ declare EventoNumeroMensagensFila
 	@expires( 1s )
 end
 
+declare EventoInstanciaAtiva
+	@role( event )
+	@expires( 1s )
+end
+
+declare EventoInstanciaInativa
+	@role( event )
+	@expires( 1s )
+end
+
 rule "estadoAtivoFilaMensagens"
 	activation-group "atualizacao-fila"
 	no-loop true
@@ -19,6 +29,7 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.NORMAL);
 	}
+	System.out.println("FILA - NORMAL! " + $elemento.toString());	
 end
 
 rule "estadoAlertaFilaMensagens"
@@ -33,6 +44,7 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.ALERTA);
 	}
+	System.out.println("FILA - ALERTA! " + $elemento.toString());	
 end
 
 rule "estadoCriticoFilaMensagens"
@@ -47,4 +59,35 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.CRITICO);
 	}
+	System.out.println("FILA - CRITICO! " + $elemento.toString());	
+end
+
+rule "estadoExecutorAtivo"
+	activation-group "executor"
+	no-loop true
+when 
+	$evento : EventoInstanciaAtiva(identificadorElementoGerenciado != null)
+	from entry-point "FluxoDeEventos"
+	$elemento : Atributo(identificador == $evento.identificadorAtributoElementoGerenciado 
+							&& programa.identificador == $evento.getIdentificadorElementoGerenciado() );
+then
+	modify ($elemento) {
+		setEstadoAtual(Estado.NORMAL);
+	}
+	System.out.println("EXECUTOR=" + $elemento.toString());	
+end
+
+rule "estadoExecutorInativo"
+	activation-group "executor"
+	no-loop true
+when 
+	$evento : EventoInstanciaInativa(identificadorElementoGerenciado != null)
+	from entry-point "FluxoDeEventos"
+	$elemento : Atributo(identificador == $evento.identificadorAtributoElementoGerenciado 
+							&& programa.identificador == $evento.getIdentificadorElementoGerenciado() );
+then
+	modify ($elemento) {
+		setEstadoAtual(Estado.INATIVO);
+	}
+	System.out.println("EXECUTOR=" + $elemento.toString());	
 end

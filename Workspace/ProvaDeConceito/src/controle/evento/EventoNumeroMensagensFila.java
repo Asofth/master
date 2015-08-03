@@ -9,6 +9,9 @@ public class EventoNumeroMensagensFila extends EventoPrimitivo {
 
 	private Long numeroMensagensFila;
 
+	public EventoNumeroMensagensFila() {
+	}
+	
 	public EventoNumeroMensagensFila(
 			IdentificadorElementoGerenciado identificadorElementoGerenciado,
 			IdentificadorAtributoElementoGerenciado identificadorAtributoElementoGerenciado,
@@ -18,6 +21,10 @@ public class EventoNumeroMensagensFila extends EventoPrimitivo {
 		this.numeroMensagensFila = numeroMensagensFila;
 	}
 
+	public void setNumeroMensagensFila(Long numeroMensagensFila) {
+		this.numeroMensagensFila = numeroMensagensFila;
+	}
+	
 	public Long getNumeroMensagensFila() {
 		return numeroMensagensFila;
 	}

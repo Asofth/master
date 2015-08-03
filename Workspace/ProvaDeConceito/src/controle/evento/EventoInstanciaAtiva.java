@@ -7,17 +7,14 @@ public class EventoInstanciaAtiva extends EventoPrimitivo {
 
 	private static final long serialVersionUID = 8093831685175655276L;
 
-	private String identificadorInstanciaAtiva;
-
+	public EventoInstanciaAtiva() {
+	}
+	
 	public EventoInstanciaAtiva(
 			IdentificadorElementoGerenciado identificadorElementoGerenciado,
 			IdentificadorAtributoElementoGerenciado identificadorAtributoElementoGerenciado) {
 		super(identificadorElementoGerenciado,
 				identificadorAtributoElementoGerenciado);
-	}
-
-	public String getIdentificadorInstanciaAtiva() {
-		return identificadorInstanciaAtiva;
 	}
 
 }

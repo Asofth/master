@@ -12,5 +12,41 @@
 				</Atributo>
 			</atributos>
 		</Programa>
+		<Programa>
+			<identificador>EXECUTOR_INSTANCIA_1</identificador>
+			<descricao>Instância 1 da aplicacao executora</descricao>
+			<atributos>
+				<Atributo>
+					<identificador>STATUS</identificador>
+					<descricao>Aplicacao iniciada ou inativa</descricao>
+					<valorAtual></valorAtual>
+					<estadoAtual>NORMAL</estadoAtual>					
+				</Atributo>
+			</atributos>
+		</Programa>
+		<Programa>
+			<identificador>EXECUTOR_INSTANCIA_2</identificador>
+			<descricao>Instância 2 da aplicacao executora</descricao>
+			<atributos>
+				<Atributo>
+					<identificador>STATUS</identificador>
+					<descricao>Aplicacao iniciada ou inativa</descricao>
+					<valorAtual></valorAtual>
+					<estadoAtual>INATIVO</estadoAtual>					
+				</Atributo>
+			</atributos>
+		</Programa>
+		<Programa>
+			<identificador>EXECUTOR_INSTANCIA_3</identificador>
+			<descricao>Instância 3 da aplicacao executora</descricao>
+			<atributos>
+				<Atributo>
+					<identificador>STATUS</identificador>
+					<descricao>Aplicacao iniciada ou inativa</descricao>
+					<valorAtual></valorAtual>
+					<estadoAtual>INATIVO</estadoAtual>					
+				</Atributo>
+			</atributos>
+		</Programa>
 	</programas>
 </SistemaControlado>

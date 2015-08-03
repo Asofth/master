@@ -18,6 +18,9 @@ public abstract class EventoPrimitivo implements Serializable {
 	private Date dataHora;
 	private String ipOrigem;
 
+	public EventoPrimitivo() {
+	}
+	
 	public EventoPrimitivo(
 			IdentificadorElementoGerenciado identificadorElementoGerenciado,
 			IdentificadorAtributoElementoGerenciado identificadorAtributoElementoGerenciado) {
@@ -31,16 +34,34 @@ public abstract class EventoPrimitivo implements Serializable {
 		}
 	}
 
+	public void setIdentificadorElementoGerenciado(
+			IdentificadorElementoGerenciado identificadorElementoGerenciado) {
+		this.identificadorElementoGerenciado = identificadorElementoGerenciado;
+	}
+
 	public IdentificadorElementoGerenciado getIdentificadorElementoGerenciado() {
 		return identificadorElementoGerenciado;
+	}
+
+	public void setIdentificadorAtributoElementoGerenciado(
+			IdentificadorAtributoElementoGerenciado identificadorAtributoElementoGerenciado) {
+		this.identificadorAtributoElementoGerenciado = identificadorAtributoElementoGerenciado;
 	}
 
 	public IdentificadorAtributoElementoGerenciado getIdentificadorAtributoElementoGerenciado() {
 		return identificadorAtributoElementoGerenciado;
 	}
 
+	public void setDataHora(Date dataHora) {
+		this.dataHora = dataHora;
+	}
+
 	public Date getDataHora() {
 		return dataHora;
+	}
+
+	public void setIpOrigem(String ipOrigem) {
+		this.ipOrigem = ipOrigem;
 	}
 
 	public String getIpOrigem() {

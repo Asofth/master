@@ -17,7 +17,6 @@ public class ControladorAtuacao {
 		try {
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setContent(mensagem);
-			// como identificar uma instancia especifica?
 			msg.addReceiver(DFUtil.search(this.agenteControlador, classeAgente));
 			this.agenteControlador.send(msg);
 		} catch (Exception e) {

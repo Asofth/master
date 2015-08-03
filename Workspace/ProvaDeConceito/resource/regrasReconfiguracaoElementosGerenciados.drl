@@ -3,33 +3,72 @@ import controle.agente.atuador.*
 
 global controle.agente.atuador.ControladorAtuacao controladorAtuacao;
 
-rule "filaMensagensAtiva"
+rule "ativacaoInstancia1"
 	activation-group "reconfiguracao"
 when 
-	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+	$fila : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
+							&& (estadoAtual == Estado.NORMAL || estadoAtual == Estado.ALERTA || estadoAtual == Estado.CRITICO));
+	$executor1 : Atributo(identificador == IdentificadorAtributoElementoGerenciado.STATUS 
+							&& programa.identificador == IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_1 
+							&& estadoAtual == Estado.INATIVO);
+then
+	controladorAtuacao.ruleFired(AgenteInicializadorInstanciaExecutor.class, IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_1.toString());
+	System.out.println("ATIVANDO! " + $executor1.toString());		
+end
+
+rule "ativacaoInstancia2"
+	activation-group "reconfiguracao"
+when 
+	$fila : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
+							&& (estadoAtual == Estado.ALERTA || estadoAtual == Estado.CRITICO));
+	$executor2 : Atributo(identificador == IdentificadorAtributoElementoGerenciado.STATUS 
+							&& programa.identificador == IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_2 
+							&& estadoAtual == Estado.INATIVO);
+then
+	controladorAtuacao.ruleFired(AgenteInicializadorInstanciaExecutor.class, IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_2.toString());
+	System.out.println("ATIVANDO! " + $executor2.toString());		
+end
+
+rule "inativacaoInstancia2"
+	activation-group "reconfiguracao"
+when 
+	$fila : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
 							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
 							&& estadoAtual == Estado.NORMAL);
+	$executor2 : Atributo(identificador == IdentificadorAtributoElementoGerenciado.STATUS 
+							&& programa.identificador == IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_2 
+							&& estadoAtual == Estado.NORMAL);
 then
-	System.out.println("REGRA ATIVADA - NORMAL! " + $elemento.toString());
+	controladorAtuacao.ruleFired(AgenteInterruptorInstanciaExecutor.class, IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_2.toString());
+	System.out.println("INATIVANDO! " + $executor2.toString());		
 end
 
-rule "filaMensagensEmAlerta"
+rule "ativacaoInstancia3"
 	activation-group "reconfiguracao"
 when 
-	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
-							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
-							&& estadoAtual == Estado.ALERTA);
-then
-	System.out.println("REGRA ATIVADA - ALERTA! " + $elemento.toString());
-	//controladorAtuacao.ruleFired(AgenteInicializadorInstanciaExecutor.class, "EXECUTOR_INSTANCIA_2");
-end
-
-rule "filaMensagensCritica"
-	activation-group "reconfiguracao"
-when 
-	$elemento : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+	$fila : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
 							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
 							&& estadoAtual == Estado.CRITICO);
+	$executor3 : Atributo(identificador == IdentificadorAtributoElementoGerenciado.STATUS 
+							&& programa.identificador == IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_3 
+							&& estadoAtual == Estado.INATIVO);
 then
-	System.out.println("REGRA ATIVADA - CRITICO! " + $elemento.toString());
+	controladorAtuacao.ruleFired(AgenteInicializadorInstanciaExecutor.class, IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_3.toString());
+	System.out.println("ATIVANDO! " + $executor3.toString());		
+end
+
+rule "inativacaoInstancia3"
+	activation-group "reconfiguracao"
+when 
+	$fila : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
+							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
+							&& (estadoAtual == Estado.ALERTA || estadoAtual == Estado.NORMAL));
+	$executor3 : Atributo(identificador == IdentificadorAtributoElementoGerenciado.STATUS 
+							&& programa.identificador == IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_3 
+							&& estadoAtual == Estado.NORMAL);
+then
+	controladorAtuacao.ruleFired(AgenteInterruptorInstanciaExecutor.class, IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_3.toString());
+	System.out.println("INATIVANDO! " + $executor3.toString());		
 end
