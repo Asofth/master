@@ -115,7 +115,7 @@ public class ExecutorConsulta {
 						continue;
 					}
 
-					long momentoInicio = System.currentTimeMillis();
+					//long momentoInicio = System.currentTimeMillis();
 					Thread.sleep(500 + intervaloMilisegundos.nextInt(1000));
 
 					// recupera mensagem da fila

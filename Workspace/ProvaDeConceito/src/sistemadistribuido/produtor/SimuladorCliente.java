@@ -36,8 +36,8 @@ public class SimuladorCliente {
 
 		// altera o intervalo a cada um minuto de execução
 		private long tempoEntreMudancaEmMilisegundos = (1 * 60 * 1000);
-		private long[] intervaloEntreMensagensEmMilisegundos = { 2000l, 1000l,
-				500l, 250l, 500l, 1000l };
+		private long[] intervaloEntreMensagensEmMilisegundos = { 400l, 350l,
+				300l, 250l, 300l, 350l };
 		private Integer posIntervaloAtual = 0;
 		private long ultimaMudanca = System.currentTimeMillis();
 		private ConectorProdutor conector = null;

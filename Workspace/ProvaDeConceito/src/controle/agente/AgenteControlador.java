@@ -6,7 +6,9 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
@@ -28,7 +30,6 @@ import util.Log;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import controle.agente.atuador.ControladorAtuacao;
 import controle.dominio.Atributo;
 import controle.dominio.Computador;
 import controle.dominio.Localidade;
@@ -44,6 +45,23 @@ public class AgenteControlador extends Agent {
 	public static final long SESSION_ID = UUID.randomUUID()
 			.getLeastSignificantBits();
 
+	public class Reconfiguracao {
+
+		private Class<? extends Agent> classeAgente;
+		private String mensagem;
+
+		public Reconfiguracao(Class<? extends Agent> classeAgente,
+				String mensagem) {
+			this.classeAgente = classeAgente;
+			this.mensagem = mensagem;
+		}
+	}
+
+	private Queue<Reconfiguracao> reconfiguracoes = new ConcurrentLinkedQueue<>();
+	public void ruleFired(Class<? extends Agent> classeAgente, String mensagem) {
+		reconfiguracoes.add(new Reconfiguracao(classeAgente, mensagem));
+	}
+
 	public class ProcessadorEvento extends CyclicBehaviour {
 
 		private static final long serialVersionUID = -1969910869557015465L;
@@ -57,7 +75,7 @@ public class AgenteControlador extends Agent {
 
 			KnowledgeBuilder builder = KnowledgeBuilderFactory
 					.newKnowledgeBuilder();
-			
+
 			// adiciona bases de regras
 			builder.add(
 					ResourceFactory
@@ -106,8 +124,7 @@ public class AgenteControlador extends Agent {
 			}
 
 			// inicializa o controlador de atuação
-			this.session.setGlobal("controladorAtuacao",
-					new ControladorAtuacao(agente));
+			this.session.setGlobal("controladorAtuacao", agente);
 
 			// inicializa fluxo de eventos
 			this.queueStream = this.session.getEntryPoint("FluxoDeEventos");
@@ -131,10 +148,6 @@ public class AgenteControlador extends Agent {
 
 		}
 
-		/**
-		 * This method initializes the agents as defined in
-		 * environment.properties file.
-		 */
 		@Override
 		public void action() {
 
@@ -165,10 +178,33 @@ public class AgenteControlador extends Agent {
 
 	}
 
+	public class AtivadorAgente extends CyclicBehaviour {
+
+		private static final long serialVersionUID = -1017720562038855599L;
+
+		@Override
+		public void action() {
+			try {
+				Reconfiguracao reconfiguracao = ((AgenteControlador) this.myAgent).reconfiguracoes
+						.poll();
+				if (reconfiguracao != null) {
+					ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+					msg.setContent(reconfiguracao.mensagem);
+					msg.addReceiver(DFUtil.search(this.myAgent,
+							reconfiguracao.classeAgente));
+					this.myAgent.send(msg);
+				}
+			} catch (Exception e) {
+				Log.registrar(e);
+			}
+		}
+	}
+
 	@Override
 	protected void setup() {
 		super.setup();
 		super.addBehaviour(new ProcessadorEvento(this));
+		super.addBehaviour(new AtivadorAgente());
 
 		DFUtil.register(this);
 	}

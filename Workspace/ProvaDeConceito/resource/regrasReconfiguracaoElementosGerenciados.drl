@@ -1,7 +1,7 @@
 import controle.dominio.*;
 import controle.agente.atuador.*
 
-global controle.agente.atuador.ControladorAtuacao controladorAtuacao;
+global controle.agente.AgenteControlador controladorAtuacao;
 
 rule "ativacaoInstancia1"
 	activation-group "reconfiguracao"
@@ -64,7 +64,7 @@ rule "inativacaoInstancia3"
 when 
 	$fila : Atributo(identificador == IdentificadorAtributoElementoGerenciado.NUMERO_MENSAGENS 
 							&& programa.identificador == IdentificadorElementoGerenciado.FILA_MENSAGEM 
-							&& (estadoAtual == Estado.ALERTA || estadoAtual == Estado.NORMAL));
+							&& (estadoAtual == Estado.NORMAL || estadoAtual == Estado.ALERTA));
 	$executor3 : Atributo(identificador == IdentificadorAtributoElementoGerenciado.STATUS 
 							&& programa.identificador == IdentificadorElementoGerenciado.EXECUTOR_INSTANCIA_3 
 							&& estadoAtual == Estado.NORMAL);
