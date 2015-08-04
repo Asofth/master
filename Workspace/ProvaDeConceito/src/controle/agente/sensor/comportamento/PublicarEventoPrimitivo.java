@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import util.DFUtil;
 import util.Log;
-import controle.agente.AgenteControlador;
+import controle.agente.controlador.AgenteProcessadorEvento;
 import controle.evento.EventoPrimitivo;
 
 public abstract class PublicarEventoPrimitivo<T extends EventoPrimitivo>
@@ -24,7 +24,7 @@ public abstract class PublicarEventoPrimitivo<T extends EventoPrimitivo>
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.setContentObject(eventoPrimitivo);
 				msg.addReceiver(DFUtil.search(super.myAgent,
-						AgenteControlador.class));
+						AgenteProcessadorEvento.class));
 //				System.out.println("Publicando Evento: "
 //						+ eventoPrimitivo.toString());
 				super.myAgent.send(msg);

@@ -1,7 +1,7 @@
 import controle.dominio.*;
 import controle.agente.atuador.*
 
-global controle.agente.AgenteControlador controladorAtuacao;
+global controle.agente.controlador.AgenteExecutorReconfiguracao controladorAtuacao;
 
 rule "ativacaoInstancia1"
 	activation-group "reconfiguracao"

@@ -29,7 +29,7 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.NORMAL);
 	}
-	System.out.println("FILA - NORMAL! " + $elemento.toString());	
+	//System.out.println("FILA - NORMAL! " + $elemento.toString());	
 end
 
 rule "estadoAlertaFilaMensagens"
@@ -44,7 +44,7 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.ALERTA);
 	}
-	System.out.println("FILA - ALERTA! " + $elemento.toString());	
+	//System.out.println("FILA - ALERTA! " + $elemento.toString());	
 end
 
 rule "estadoCriticoFilaMensagens"
@@ -59,7 +59,7 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.CRITICO);
 	}
-	System.out.println("FILA - CRITICO! " + $elemento.toString());	
+	//System.out.println("FILA - CRITICO! " + $elemento.toString());	
 end
 
 rule "estadoExecutorAtivo"
@@ -74,7 +74,7 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.NORMAL);
 	}
-	System.out.println("EXECUTOR=" + $elemento.toString());	
+	//System.out.println("EXECUTOR=" + $elemento.toString());	
 end
 
 rule "estadoExecutorInativo"
@@ -89,5 +89,5 @@ then
 	modify ($elemento) {
 		setEstadoAtual(Estado.INATIVO);
 	}
-	System.out.println("EXECUTOR=" + $elemento.toString());	
+	//System.out.println("EXECUTOR=" + $elemento.toString());	
 end
