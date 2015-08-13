@@ -6,7 +6,6 @@ import jade.wrapper.AgentContainer;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
@@ -38,8 +37,8 @@ public class AgenteControlador extends Agent {
 
 	private static final long serialVersionUID = 273786892468632402L;
 
-	public static final long SESSION_ID = UUID.randomUUID()
-			.getLeastSignificantBits();
+	// public static final long SESSION_ID = UUID.randomUUID()
+	// .getLeastSignificantBits();
 
 	private KnowledgeBase knowledgeBase = null;
 	private StatefulKnowledgeSession session = null;
@@ -114,16 +113,15 @@ public class AgenteControlador extends Agent {
 						.getEntryPoint("FluxoDeEventos");
 				// inicializa agente executor de reconfigurações
 				AgentContainer ac = super.myAgent.getContainerController();
-				String agentName = DFUtil.getAgentName(
-						AgenteExecutorReconfiguracao.class, SESSION_ID);
+				String agentName = DFUtil
+						.getAgentName(AgenteExecutorReconfiguracao.class);
 				ac.createNewAgent(agentName,
 						AgenteExecutorReconfiguracao.class.getName(),
 						new Object[] { session });
 				ac.getAgent(agentName).start();
 
 				// inicializa o agente processador de eventos
-				agentName = DFUtil.getAgentName(AgenteProcessadorEvento.class,
-						SESSION_ID);
+				agentName = DFUtil.getAgentName(AgenteProcessadorEvento.class);
 				ac.createNewAgent(agentName,
 						AgenteProcessadorEvento.class.getName(), new Object[] {
 								session, queueStream });
