@@ -1,5 +1,0 @@
-- Implementar o controlador;
-	- Implementar para permitir publicar eventos no agente controlador;
-	- Instanciar modelo de dominio;
-	- Implementar regras de ativação;
-- Implementar dashboard para visualização a partir do modelo de dominio
